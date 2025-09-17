@@ -165,9 +165,21 @@
     </div>  
        
     <div class="actions">
-        <button class="btn">refresh data</button>
-        <button class="btn">Refresh Data</button>
-        <button class="btn">Place Order</button>
+        <button class="btn" onclick="refreshData()">Refresh Data</button>
+        <button class="btn" onclick="viewPortfolio()">View Portfolio</button>
+        <button class="btn" onclick="placeOrder()">Place Order</button>
     </div> 
+    <script>
+        function refreshData() {
+            alert("Data refreshed!");
+        }
+
+        function viewPortfolio() {
+            alert("Viewing portfolio!");
+        }
+        function placeOrder() {
+            alert("Placing order!");
+        }
+    </script>
 </body>
 </html>
