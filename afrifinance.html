@@ -12,7 +12,7 @@
             text-align: center;
             margin: 50px;
             padding: 20px;
-            background-color: #e7cfcf;
+            background-color: #d7d0d0;
         }
         h1 {
             color: #0a0202;
@@ -115,6 +115,35 @@
         .btn:hover {
             background-color: #45a049;
         }
+        .watchlist {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            margin: 30px auto;
+            background-color: #f0f0f0;
+            width: 80%;
+            border-radius: 10px;
+            text-align: center;
+        }
+        #watchlist-items {
+                margin-top: 20px;
+        }
+        .watchlist-item {
+                padding: 10px;
+                border-bottom: 1px solid #ccc;
+                background-color: #fff;
+                margin: 5px 0;
+                border-radius: 5px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+        }
+        .stock-card:hover {
+            background-color: #f0f8f0;
+            cursor: pointer;
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
+        }
 
     </style>
 </head>
@@ -143,42 +172,142 @@
                 <p class="index-value">156.89</p>
                 <p class="positive">+2.14 (+1.38%)</p>
             </div>
+            <h2>My watchlist</h2>
+            <div class="watchlist">
+                <p><strong>click on stock above to add it to your watchlist</strong></p>
+                <div id ="watchlist-items">
+                </div>
+            </div>
         </div>
     </section>
-
     <div class="stock-grid">
-        <div class="stock-card">
+        <div class="stock-card" id="SAFCOM" onclick="addToWatchlist('SAFCOM')">
             <h3>SAFCOM - Safaricom PLC</h3>
-            <p>Price: KES 26.80</p>
-            <p class="positive">change: +1.20 (+4.69%)</p>
+            <p class="price">Price: KES 26.80</p>
+            <p class="change positive">change: +1.20 (+4.69%)</p>
         </div>
-        <div class="stock-card">
+        <div class="stock-card" id ="EQTY" onclick="addToWatchlist('EQTY')">
             <h3>EQTY - Equity Group Holdings PLC</h3>
-            <p>Price: KES 45.00</p>
-            <p class="positive">Change: +2.50 (+5.12%)</p>
+            <p class="price">Price: KES 45.00</p>
+            <p class="change positive">Change: +2.50 (+5.12%)</p>
         </div>
-        <div class="stock-card">
+        <div class="stock-card" id="KCB" onclick="addToWatchlist('KCB')">
             <h3>KCB - KCB Group PLC</h3>
-            <p>Price: KES 38.50</p>
-            <p class="negative">Change: -1.80 (-4.91%)</p>
+            <p class="price">Price: KES 38.50</p>
+            <p class="change negative">Change: -1.80 (-4.91%)</p>
         </div> 
-    </div>  
-       
+    </div>     
     <div class="actions">
         <button class="btn" onclick="refreshData()">Refresh Data</button>
         <button class="btn" onclick="viewPortfolio()">View Portfolio</button>
         <button class="btn" onclick="placeOrder()">Place Order</button>
     </div> 
+
+
     <script>
+    
+
+         let stocks = [
+        { symbol: 'SAFCOM', name: 'Safaricom PLC', price: 26.80, change: 1.20, changePercent: 4.69 },
+        { symbol: 'EQTY', name: 'Equity Group', price: 45.50, change: 2.30, changePercent: 5.33 },
+        { symbol: 'KCB', name: 'KCB Group', price: 42.25, change: -0.75, changePercent: -1.74 }
+        ];
+
         function refreshData() {
-            alert("Data refreshed!");
+        console.log('Refresh Data clicked!');
+        
+        // Simulate price changes
+        stocks.forEach(stock => {
+            // Random price change between -2 and +2
+            let priceChange = (Math.random() - 0.5) * 4;
+            stock.price = Math.round((stock.price + priceChange) * 100) / 100;
+            stock.change = Math.round(priceChange * 100) / 100;
+            stock.changePercent = Math.round((priceChange / stock.price) * 10000) / 100;
+        });
+        
+        updateDisplay();
+        alert('Stock prices updated!');
+        }
+    
+        function updateDisplay() {
+        console.log('Updating display...');
+        stocks.forEach(stock => {
+            // Find the stock card by ID
+            let card = document.getElementById(stock.symbol);
+            if (!card) {
+                console.log('Card not found for:', stock.symbol);
+                return;
+            }
+            
+            // Update price
+            let priceElement = card.querySelector('.price');
+            if (priceElement) {
+                priceElement.textContent = `Price: KES ${stock.price.toFixed(2)}`;
+            }
+            
+            // Update change
+            let changeElement = card.querySelector('.change');
+            if (changeElement) {
+                let sign = stock.change >= 0 ? '+' : '';
+                changeElement.textContent = `Change: ${sign}${stock.change.toFixed(2)} (${sign}${stock.changePercent.toFixed(2)}%)`;
+                
+                // Update color class
+                if (stock.change >= 0) {
+                    changeElement.className = 'change positive';
+                } else {
+                    changeElement.className = 'change negative';
+                }
+            }
+        });
+        }
+    
+     function addToWatchlist(symbol) {
+        console.log('Adding to watchlist:', symbol);
+        let stock = stocks.find(s => s.symbol === symbol);
+        if (!stock) {
+            console.log('Stock not found:', symbol);
+            return;
+        }
+        
+        let watchlistDiv = document.getElementById('watchlist-items');
+        if (!watchlistDiv) {
+            console.log('Watchlist div not found');
+            return;
+        }
+        
+        // Check if already in watchlist
+        if (document.getElementById(`watch-${symbol}`)) {
+            alert(`${symbol} is already in your watchlist!`);
+            return;
+        }
+        
+        // Create watchlist item
+        let item = document.createElement('div');
+        item.className = 'watchlist-item';
+        item.id = `watch-${symbol}`;
+        item.innerHTML = `
+            <span>${stock.symbol} - KES ${stock.price.toFixed(2)}</span>
+            <button onclick="removeFromWatchlist('${symbol}')" style="background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">Remove</button>
+        `;
+        
+        watchlistDiv.appendChild(item);
+        alert(`${symbol} added to watchlist!`);
         }
 
-        function viewPortfolio() {
-            alert("Viewing portfolio!");
+        function removeFromWatchlist(symbol) {
+        console.log('Removing from watchlist:', symbol);
+        let item = document.getElementById(`watch-${symbol}`);
+        if (item) {
+            item.remove();
         }
-        function placeOrder() {
-            alert("Placing order!");
+        }
+    
+        function viewPortfolio() {
+            alert('Portfolio view - this would show your stock holdings.');
+        }
+    
+     function placeOrder() {
+        alert('Place Order - this would open a buy/sell interface.');
         }
     </script>
 </body>
