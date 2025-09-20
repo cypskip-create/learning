@@ -144,6 +144,27 @@
             transform: translateY(-2px);
             transition: all 0.3s ease;
         }
+        .search-section {
+            margin: 30px 0;
+            text-align: center;
+        }
+        #stock-search {
+            width: 300px;
+            padding: 12px 20px;
+            outline: none;
+            text-align: center;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+        }
+        #stock-search:focus {
+            border-color: #2c5f2d;
+            box-shadow: 0 0 10px rgba(44, 95, 45, 0.3);
+        }
+        .stock-card.hidden {
+            display: none;
+        }
+
 
     </style>
 </head>
@@ -154,6 +175,12 @@
         <p>Your Gateway to African Financial Markets</p>
     </div>
     <p>Welcome to Afrifinance</p>
+    <section>
+        <div class="search-section">
+            <h2>Search Stocks</h2>
+            <input type="text" id="stock-search" placeholder="search for a stock (e.g.SAFCOM,KCB)..." onkeyup="searchStocks()">
+        </div>
+    </section>
     <section>
         <h2>Market Overview</h2>
         <div class="market-card">
@@ -172,31 +199,71 @@
                 <p class="index-value">156.89</p>
                 <p class="positive">+2.14 (+1.38%)</p>
             </div>
-            <h2>My watchlist</h2>
-            <div class="watchlist">
-                <p><strong>click on stock above to add it to your watchlist</strong></p>
-                <div id ="watchlist-items">
-                </div>
+        </div>
+    </section>
+    <section>
+        <h2>My Watchlist</h2>
+        <div class="watchlist">
+            <p><strong>Click on a stock to add it to your watchlist.</strong></p>
+            <div id="watchlist-items">
             </div>
         </div>
     </section>
-    <div class="stock-grid">
-        <div class="stock-card" id="SAFCOM" onclick="addToWatchlist('SAFCOM')">
-            <h3>SAFCOM - Safaricom PLC</h3>
-            <p class="price">Price: KES 26.80</p>
-            <p class="change positive">change: +1.20 (+4.69%)</p>
+    <section>
+        <h2>Stocks</h2>
+        <div class="stock-grid">
+            <div class="stock-card" id="SAFCOM" onclick="addToWatchlist('SAFCOM')">
+                <h3>SAFCOM - Safaricom PLC</h3>
+                <p class="price">Price: KES 26.80</p>
+                <p class="change positive">Change: +1.20 (+4.69%)</p>
+            </div>
+            <div class="stock-card" id="EQTY" onclick="addToWatchlist('EQTY')">
+                <h3>EQTY - Equity Group Holdings PLC</h3>
+                <p class="price">Price: KES 45.00</p>
+                <p class="change positive">Change: +2.50 (+5.12%)</p>
+            </div>
+            <div class="stock-card" id="KCB" onclick="addToWatchlist('KCB')">
+                <h3>KCB - KCB Group PLC</h3>
+                <p class="price">Price: KES 38.50</p>
+                <p class="change negative">Change: -1.80 (-4.91%)</p>
+            </div>
+            <div class="stock-card" id="NBK" onclick="addToWatchlist('NBK')">
+                <h3>NBK - National Bank of Kenya</h3>
+                <p class="price">Price: KES 28.40</p>
+                <p class="change positive">Change: +0.60 (+2.16%)</p>
+            </div>
+            <div class="stock-card" id="COOP" onclick="addToWatchlist('COOP')">
+                <h3>COOP - Co-operative Bank of Kenya</h3>
+                <p class="price">Price: KES 12.75</p>
+                <p class="change negative">Change: -0.20 (-1.55%)</p>
+            </div>
+            <div class="stock-card" id="BAT" onclick="addToWatchlist('BAT')">
+                <h3>BAT - British American Tobacco Kenya</h3>
+                <p class="price">Price: KES 450.00</p>
+                <p class="change positive">Change: +5.00 (+1.12%)</p>
+            </div>
+            <div class="stock-card" id="EABL" onclick="addToWatchlist('EABL')">
+                <h3>EABL - East African Breweries Limited</h3>
+                <p class="price">Price: KES 160.00</p>
+                <p class="change negative">Change: -2.00 (-1.23%)</p>
+            </div>
+            <div class="stock-card" id="SCOM" onclick="addToWatchlist('SCOM')">
+                <h3>SCOM - Standard Chartered Bank Kenya</h3>
+                <p class="price">Price: KES 120.50</p>
+                <p class="change positive">Change: +1.50 (+1.26%)</p>
+            </div>
+            <div class="stock-card" id="JUB" onclick="addToWatchlist('JUB')">
+                <h3>JUB - Jubilee Holdings Limited</h3>
+                <p class="price">Price: KES 200.00</p>
+                <p class="change positive">Change: +3.00 (+1.52%)</p>
+            </div>
+            <div class="stock-card" id="KQ" onclick="addToWatchlist('KQ')">
+                <h3>KQ - Kenya Airways</h3>
+                <p class="price">Price: KES 10.50</p>
+                <p class="change negative">Change: -0.30 (-2.78%)</p>
+            </div>
         </div>
-        <div class="stock-card" id ="EQTY" onclick="addToWatchlist('EQTY')">
-            <h3>EQTY - Equity Group Holdings PLC</h3>
-            <p class="price">Price: KES 45.00</p>
-            <p class="change positive">Change: +2.50 (+5.12%)</p>
-        </div>
-        <div class="stock-card" id="KCB" onclick="addToWatchlist('KCB')">
-            <h3>KCB - KCB Group PLC</h3>
-            <p class="price">Price: KES 38.50</p>
-            <p class="change negative">Change: -1.80 (-4.91%)</p>
-        </div> 
-    </div>     
+    </section>
     <div class="actions">
         <button class="btn" onclick="refreshData()">Refresh Data</button>
         <button class="btn" onclick="viewPortfolio()">View Portfolio</button>
@@ -205,109 +272,125 @@
 
 
     <script>
-    
-
-         let stocks = [
-        { symbol: 'SAFCOM', name: 'Safaricom PLC', price: 26.80, change: 1.20, changePercent: 4.69 },
-        { symbol: 'EQTY', name: 'Equity Group', price: 45.50, change: 2.30, changePercent: 5.33 },
-        { symbol: 'KCB', name: 'KCB Group', price: 42.25, change: -0.75, changePercent: -1.74 }
+        let stocks = [
+            { symbol: 'SAFCOM', name: 'Safaricom PLC', price: 26.80, change: 1.20, changePercent: 4.69 },
+            { symbol: 'EQTY', name: 'Equity Group', price: 45.50, change: 2.30, changePercent: 5.33 },
+            { symbol: 'KCB', name: 'KCB Group', price: 42.25, change: -0.75, changePercent: -1.74 },
+            { symbol: 'NBK', name: 'National Bank of Kenya', price: 28.40, change: 0.60, changePercent: 2.16 },
+            { symbol: 'COOP', name: 'Co-operative Bank of Kenya', price: 12.75, change: -0.20, changePercent: -1.55 },
+            { symbol: 'BAT', name: 'British American Tobacco Kenya', price: 450.00, change: 5.00, changePercent: 1.12 },
+            { symbol: 'EABL', name: 'East African Breweries Limited', price: 160.00, change: -2.00, changePercent: -1.23 },
+            { symbol: 'SCOM', name: 'Standard Chartered Bank Kenya', price: 120.50, change: 1.50, changePercent: 1.26 },
+            { symbol: 'JUB', name: 'Jubilee Holdings Limited', price: 200.00, change: 3.00, changePercent: 1.52 },
+            { symbol: 'KQ', name: 'Kenya Airways', price: 10.50, change: -0.30, changePercent: -2.78 }
         ];
 
         function refreshData() {
-        console.log('Refresh Data clicked!');
-        
-        // Simulate price changes
-        stocks.forEach(stock => {
-            // Random price change between -2 and +2
-            let priceChange = (Math.random() - 0.5) * 4;
-            stock.price = Math.round((stock.price + priceChange) * 100) / 100;
-            stock.change = Math.round(priceChange * 100) / 100;
-            stock.changePercent = Math.round((priceChange / stock.price) * 10000) / 100;
-        });
-        
-        updateDisplay();
-        alert('Stock prices updated!');
+            console.log('Refresh Data clicked!');
+            // Simulate price changes
+            stocks.forEach(stock => {
+                // Random price change between -2 and +2
+                let priceChange = (Math.random() - 0.5) * 4;
+                stock.price = Math.round((stock.price + priceChange) * 100) / 100;
+                stock.change = Math.round(priceChange * 100) / 100;
+                stock.changePercent = Math.round((priceChange / stock.price) * 10000) / 100;
+            });
+            updateDisplay();
+            alert('Stock prices updated!');
         }
-    
+
         function updateDisplay() {
-        console.log('Updating display...');
-        stocks.forEach(stock => {
-            // Find the stock card by ID
-            let card = document.getElementById(stock.symbol);
-            if (!card) {
-                console.log('Card not found for:', stock.symbol);
+            console.log('Updating display...');
+            stocks.forEach(stock => {
+                // Find the stock card by ID
+                let card = document.getElementById(stock.symbol);
+                if (!card) {
+                    console.log('Card not found for:', stock.symbol);
+                    return;
+                }
+                // Update price
+                let priceElement = card.querySelector('.price');
+                if (priceElement) {
+                    priceElement.textContent = `Price: KES ${stock.price.toFixed(2)}`;
+                }
+                // Update change
+                let changeElement = card.querySelector('.change');
+                if (changeElement) {
+                    let sign = stock.change >= 0 ? '+' : '';
+                    changeElement.textContent = `Change: ${sign}${stock.change.toFixed(2)} (${sign}${stock.changePercent.toFixed(2)}%)`;
+                    // Update color class
+                    if (stock.change >= 0) {
+                        changeElement.className = 'change positive';
+                    } else {
+                        changeElement.className = 'change negative';
+                    }
+                }
+            });
+        }
+
+        function addToWatchlist(symbol) {
+            console.log('Adding to watchlist:', symbol);
+            let stock = stocks.find(s => s.symbol === symbol);
+            if (!stock) {
+                console.log('Stock not found:', symbol);
                 return;
             }
-            
-            // Update price
-            let priceElement = card.querySelector('.price');
-            if (priceElement) {
-                priceElement.textContent = `Price: KES ${stock.price.toFixed(2)}`;
+            let watchlistDiv = document.getElementById('watchlist-items');
+            if (!watchlistDiv) {
+                console.log('Watchlist div not found');
+                return;
             }
-            
-            // Update change
-            let changeElement = card.querySelector('.change');
-            if (changeElement) {
-                let sign = stock.change >= 0 ? '+' : '';
-                changeElement.textContent = `Change: ${sign}${stock.change.toFixed(2)} (${sign}${stock.changePercent.toFixed(2)}%)`;
-                
-                // Update color class
-                if (stock.change >= 0) {
-                    changeElement.className = 'change positive';
-                } else {
-                    changeElement.className = 'change negative';
-                }
+            // Check if already in watchlist
+            if (document.getElementById(`watch-${symbol}`)) {
+                alert(`${symbol} is already in your watchlist!`);
+                return;
             }
-        });
-        }
-    
-     function addToWatchlist(symbol) {
-        console.log('Adding to watchlist:', symbol);
-        let stock = stocks.find(s => s.symbol === symbol);
-        if (!stock) {
-            console.log('Stock not found:', symbol);
-            return;
-        }
-        
-        let watchlistDiv = document.getElementById('watchlist-items');
-        if (!watchlistDiv) {
-            console.log('Watchlist div not found');
-            return;
-        }
-        
-        // Check if already in watchlist
-        if (document.getElementById(`watch-${symbol}`)) {
-            alert(`${symbol} is already in your watchlist!`);
-            return;
-        }
-        
-        // Create watchlist item
-        let item = document.createElement('div');
-        item.className = 'watchlist-item';
-        item.id = `watch-${symbol}`;
-        item.innerHTML = `
-            <span>${stock.symbol} - KES ${stock.price.toFixed(2)}</span>
-            <button onclick="removeFromWatchlist('${symbol}')" style="background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">Remove</button>
-        `;
-        
-        watchlistDiv.appendChild(item);
-        alert(`${symbol} added to watchlist!`);
+            // Create watchlist item
+            let item = document.createElement('div');
+            item.className = 'watchlist-item';
+            item.id = `watch-${symbol}`;
+            item.innerHTML = `
+                <span>${stock.symbol} - KES ${stock.price.toFixed(2)}</span>
+                <button onclick="removeFromWatchlist('${symbol}')" style="background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">Remove</button>
+            `;
+            watchlistDiv.appendChild(item);
+            alert(`${symbol} added to watchlist!`);
         }
 
         function removeFromWatchlist(symbol) {
-        console.log('Removing from watchlist:', symbol);
-        let item = document.getElementById(`watch-${symbol}`);
-        if (item) {
-            item.remove();
+            console.log('Removing from watchlist:', symbol);
+            let item = document.getElementById(`watch-${symbol}`);
+            if (item) {
+                item.remove();
+            }
         }
-        }
-    
+
         function viewPortfolio() {
-            alert('Portfolio view - this would show your stock holdings.');
+            alert('Portfolio View - This would show your stock holdings.');
         }
-    
-     function placeOrder() {
-        alert('Place Order - this would open a buy/sell interface.');
+
+        function placeOrder() {
+            alert('Place Order - This would open a buy/sell interface.');
+        }
+
+        function searchStocks() {
+            let searchTerm = document.getElementById('stock-search').value.toLowerCase();
+            stocks.forEach(stock => {
+                let card = document.getElementById(stock.symbol);
+                let stockName = stock.name.toLowerCase();
+                let stockSymbol = stock.symbol.toLowerCase();
+                if (stockName.includes(searchTerm) || stockSymbol.includes(searchTerm)) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+            if (searchTerm === '') {
+                stocks.forEach(stock => {
+                    let card = document.getElementById(stock.symbol);
+                    card.classList.remove('hidden');
+                });
+            }
         }
     </script>
 </body>
