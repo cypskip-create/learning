@@ -164,6 +164,48 @@
         .stock-card.hidden {
             display: none;
         }
+        .portfolio-section {
+            margin: 30px auto;
+            width: 90%;
+            border-radius: 15px;
+            background-color: #f8f9fa;
+            padding: 25px;
+            margin-top: 40px;
+            text-align: center;
+            border: 2px solid #e9ecef;
+        }
+        .portfolio-summary {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .portfolio-card {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            width: 200px;
+            text-align: center;
+            min-width: 150px;
+        }
+        .portfolio-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin: 5px 0;
+        }
+        .portfolio-change {
+            font-size: 16px;
+            margin: 5px 0;
+            font-weight: bold;
+        }
+        .portfolio-holdings {
+            margin: 5px 0;
+            font-size: 16px;
+            color: #666;
+        }
 
 
     </style>
@@ -206,6 +248,22 @@
         <div class="watchlist">
             <p><strong>Click on a stock to add it to your watchlist.</strong></p>
             <div id="watchlist-items">
+            </div>
+        </div>
+        <div class="portfolio-section">
+            <h2>my Portfolio</h2>
+            <div class="portfolio-summary">
+                <div class="portfolio-card">
+                    <h4>total value</h4>
+                    <p class="portfolio-value" id="total-value">KES 0.00</p>
+                </div>
+                <div class ="portfolio-card">
+                    <h4>today's change</h4>
+                    <p class="portfolio-change" id="total-holdings">KES 0.00 (+0.00%)</p>
+                </div>
+            </div>
+            <div id="portfolio-stocks">
+                <p>No stocks in your portfolio. <button onclick="addSampleHoldings()" class="btn" style="padding: 5px 15px; font-size: 14px;">Add Sample Holdings</button></p>
             </div>
         </div>
     </section>
@@ -263,6 +321,7 @@
                 <p class="change negative">Change: -0.30 (-2.78%)</p>
             </div>
         </div>
+        
     </section>
     <div class="actions">
         <button class="btn" onclick="refreshData()">Refresh Data</button>
