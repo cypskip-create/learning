@@ -7,7 +7,7 @@
         {
             "type": "chrome",
             "request": "launch",
-            "name": "Open afrifinance.html",
+            "name": "Open homepage.html",
             "file": "${workspaceFolder}/homepage.html"
         }
     ]
