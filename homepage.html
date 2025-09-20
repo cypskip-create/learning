@@ -384,6 +384,7 @@
                         changeElement.className = 'change negative';
                     }
                 }
+            updateportfolioDisplay();
             });
         }
 
@@ -450,6 +451,69 @@
                     card.classList.remove('hidden');
                 });
             }
+        }
+        let portfolio = [];
+
+        function addSampleHoldings() {
+            portfolio = [
+                { symbol: 'SAFCOM', name: 'Safaricom PLC', quantity: 100, purchasePrice: 25.00 },
+                { symbol: 'EQTY', name: 'Equity Group Holdings PLC', quantity: 50, purchasePrice: 40.00 },
+                { symbol: 'KCB', name: 'KCB Group PLC', quantity: 75, purchasePrice: 35.00 }
+            ];
+            updatePortfolioDisplay();
+            alert('Sample holdings added to your portfolio!');
+        }
+
+        function updateportfolioDisplay(){
+            let totalvalue = 0;
+            let totalChange = 0;
+            let portfolioDiv = document.getElementById('portfolio-stocks');
+
+            if (portfolio.length === 0) {
+                portfolioDiv.innerHTML = '<p>No stocks in your portfolio. <button onclick="addSampleHoldings()" class="btn" style="padding: 5px 15px; font-size: 14px;">Add Sample Holdings</button></p>';
+                document.getElementById('total-value').textContent = 'KES 0.00';
+                document.getElementById('total-change').textContent = 'KES 0.00 (+0.00%)';
+                document.getElementById('total-holdings').textContent = '0 stocks';
+                return;
+            }
+            portfolioDiv.innerHTML = '';
+            portfolio.forEach(holding => {
+                let stock = stocks.find(s => s.symbol === holding.symbol);
+                if (!stock) return;
+
+                let currentValue = stock.price * holding.shares;
+                let purchaseValue = holding.purchasePrice * holding.shares;
+                let gainloss = currentValue - purchaseValue;
+                let gainlosspercent = (gainloss / purchaseValue) * 100;
+
+                totalvalue += currentValue;
+                totalChange += gainloss;
+
+                let item = document.createElement('div');
+                item.className = 'portfolio-item';
+                item.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #ccc;">
+                        <div>
+                            <strong>${stock.symbol}</strong> - ${holding.shares} shares
+                            <br><small>bought at KES ${holding.purchasePrice.toFixed(2)}</small>
+                        </div>
+                        <div style="text-align: right;">
+                            <div>KES ${currentValue.toFixed(2)}</div>
+                            <div class="${gainloss >= 0 ? 'positive' : 'negative'}"> style="font-size: 14px;">
+                                ${gainloss >= 0 ? '+' : ''}${gainloss.toFixed(2)} (${gainlosspercent >= 0 ? '+' : ''}${gainlosspercent.toFixed(2)}%)
+                            </div>
+                        </div>
+                    </div>
+                `;  
+                portfolioDiv.appendChild(holdingDiv);
+            });
+
+            let totalChangePercent = totalvalue > 0 ? (totalchange / (totalvalue - totalchange)) * 100 : 0;
+
+            document.getElementById('total-value').textContent = `KES ${totalvalue.toFixed(2)}`;
+            document.getElementById('total-change').textContent = `KES ${totalChange >= 0 ? '+' : ''}${totalChange.toFixed(2)} (${totalChangePercent >= 0 ? '+' : ''}${totalChangePercent.toFixed(2)}%)`;
+            document.getElementById('total-holdings').textContent = `${portfolio.length} stocks`;
+            document.getElementById('total-change').className = `portfolio-change ${totalChange >= 0 ? 'positive' : 'negative'}`;
         }
     </script>
 </body>
