@@ -435,7 +435,7 @@
         <div class="chart-section">
             <h2>Price Chart</h2>
             <div class="chart-controls">
-                <select id="chart-stock" onchange="updateChart()">
+                <select id="chart-stock" onchange="updateChart(); updateAnalysis();">
                     <option value="SAFCOM">SAFCOM - Safaricom PLC</option>
                     <option value="EQTY">EQTY - Equity Group Holdings PLC</option>
                     <option value="KCB">KCB - KCB Group PLC</option>
@@ -447,6 +447,43 @@
                 <button onclick="generateMoreData()" class="btn" style="padding: 5px 15px; font-size: 14px;">Generate More Data</button>
             </div>
             <canvas id="priceChart" width="400" height="200"></canvas>
+        </div>
+        <!-- Technical Analysis Section -->
+        <div class="chart-section" style="margin-top:20px;">
+            <h2>Technical Analysis</h2>
+            <div class="chart-controls">
+                <select id="analysis-stock" onchange="updateAnalysis()">
+                    <option value="SAFCOM">SAFCOM - Safaricom PLC</option>
+                    <option value="EQTY">EQTY - Equity Group Holdings PLC</option>
+                    <option value="KCB">KCB - KCB Group PLC</option>
+                    <option value="NBK">NBK - National Bank of Kenya</option>
+                    <option value="COOP">COOP - Co-operative Bank of Kenya</option>
+                    <option value="BAT">BAT - British American Tobacco Kenya</option>
+                    <option value="EABL">EABL - East African Breweries Limited</option>
+                </select>
+            </div>
+            <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:30px;">
+                <div style="min-width:220px;">
+                    <h4>Moving Average (5 days)</h4>
+                    <p id="ma5" class="analysis-value">--</p>
+                    <p id="ma5-trend" class="analysis-signal">--</p>
+                </div>
+                <div style="min-width:220px;">
+                    <h4>Trend</h4>
+                    <p id="trend" class="analysis-value">--</p>
+                    <p id="trend-strength" class="analysis-signal">--</p>
+                </div>
+                <div style="min-width:220px;">
+                    <h4>Volatility</h4>
+                    <p id="volatility" class="analysis-value">--</p>
+                    <p id="volatility-level" class="analysis-signal">--</p>
+                </div>
+                <div style="min-width:220px;">
+                    <h4>Recommendation</h4>
+                    <p id="recommendation" class="analysis-value">--</p>
+                    <p id="confidence" class="analysis-signal">--</p>
+                </div>
+            </div>
         </div>
     </section>
     <section>
@@ -797,9 +834,97 @@
             alert('Added 10 more days of price data!');
         }
 
+        // --- Technical Analysis Section ---
+        function calculateMovingAverage(prices, period) {
+            if (prices.length < period) return null;
+            let sum = 0;
+            for (let i = prices.length - period; i < prices.length; i++) {
+                sum += prices[i];
+            }
+            return sum / period;
+        }
+
+        function calculateTrend(prices) {
+            if (prices.length < 10) return {direction: 'Neutral', strength: 0};
+            let recent = prices.slice(-5);
+            let older = prices.slice(-10, -5);
+            let recentAvg = recent.reduce((a,b) => a + b, 0) / recent.length;
+            let olderAvg = older.reduce((a,b) => a + b, 0) / older.length;
+            let change = ((recentAvg - olderAvg) / olderAvg) * 100;
+            let direction = change > 1 ? 'Bullish' : change < -1 ? 'Bearish' : 'Neutral';
+            let strength = Math.abs(change);
+            return {direction, strength};
+        }
+
+        function calculateVolatility(prices) {
+            if (prices.length < 5) return {level: 0, description:'Low'};
+            let changes =[];
+            for (let i = 1; i < prices.length; i++) {
+                changes.push(Math.abs((prices[i] - prices[i - 1]) / prices[i - 1]) * 100);
+            }
+            let avgVolatility = changes.reduce((a,b) => a + b, 0) / changes.length;
+            let description = avgVolatility > 3 ? 'High' : avgVolatility > 1.5 ? 'Medium' : 'Low';
+            return {level: avgVolatility, description };
+        }
+
+        function generateRecommendation(ma5signal, trend, volatility, currentPrice, ma5) {
+            let score = 0;
+            if (ma5signal === 'Buy signal') score +=2;
+            else if (ma5signal === 'Sell Signal') score -= 2;
+            if (trend.direction === 'Bullish') score += trend.strength > 2 ? 2: 1;
+            else if (trend.direction === 'Bearish') score -= trend.strength > 2 ? 2: 1;
+            if (volatility.description === 'High') score -= 1;
+            let recommendation, confidence;
+            if (score >= 4) { recommendation = 'STRONG BUY'; confidence = 'High'; }
+            else if (score === 3) { recommendation = 'BUY'; confidence = 'High'; }
+            else if (score === 2) { recommendation = 'BUY'; confidence = 'Medium'; }
+            else if (score === 1) { recommendation = 'Hold'; confidence = 'Low'; }
+            else if (score === 0) { recommendation = 'Hold'; confidence = 'Medium'; }
+            else if (score === -1) { recommendation = 'Hold'; confidence = 'Low'; }
+            else if (score === -2) { recommendation = 'Sell'; confidence = 'Medium'; }
+            else { recommendation = 'Strong Sell'; confidence = 'High'; }
+            return {recommendation, confidence};
+        }
+
+        function updateAnalysis() {
+            let selectedStock = document.getElementById('analysis-stock').value;
+            let stock = stocks.find(s => s.symbol === selectedStock);
+            let prices = chartData[selectedStock] ? chartData[selectedStock].prices : [];
+            if (!prices || prices.length < 5) {
+                document.getElementById('ma5').textContent = 'Insufficient Data';
+                document.getElementById('ma5-trend').textContent = '--';
+                document.getElementById('trend').textContent = '--';
+                document.getElementById('trend-strength').textContent = '--';
+                document.getElementById('volatility').textContent = '--';
+                document.getElementById('volatility-level').textContent = '--';
+                document.getElementById('recommendation').textContent = '--';
+                document.getElementById('confidence').textContent = '--';
+                return;
+            }
+            let ma5 = calculateMovingAverage(prices, 5);
+            let ma5signal = stock.price > ma5 ? 'Buy signal' : stock.price < ma5 ? 'Sell Signal' : 'Neutral';
+            let trend = calculateTrend(prices);
+            let volatility = calculateVolatility(prices);
+            let recommendationData = generateRecommendation(ma5signal, trend, volatility, stock.price, ma5);
+
+            document.getElementById('ma5').textContent = `KES ${ma5.toFixed(2)}`;
+            document.getElementById('ma5-trend').textContent = ma5signal;
+            document.getElementById('ma5-trend').className = `analysis-signal ${ma5signal === 'Buy signal' ? 'positive' : ma5signal === 'Sell Signal' ? 'negative' : 'neutral'}`;
+            document.getElementById('trend').textContent = trend.direction;
+            document.getElementById('trend-strength').textContent = `Strength: ${trend.strength.toFixed(1)}%`;
+            document.getElementById('trend-strength').className = `analysis-value ${trend.direction === 'Bullish' ? 'positive' : trend.direction === 'Bearish' ? 'negative' : 'neutral'}`;
+            document.getElementById('volatility').textContent = `${volatility.level.toFixed(1)}%`;
+            document.getElementById('volatility-level').textContent = volatility.description;
+            document.getElementById('volatility-level').className = `analysis-signal ${volatility.description === 'High' ? 'negative' : volatility.description === 'Low' ? 'positive' : 'neutral'}`;
+            document.getElementById('recommendation').textContent = recommendationData.recommendation;
+            document.getElementById('confidence').textContent = `Confidence: ${recommendationData.confidence}`;
+            document.getElementById('recommendation').className = `analysis-value ${recommendationData.recommendation.includes('BUY') ? 'positive' : recommendationData.recommendation.includes('Sell') ? 'negative' : 'neutral'}`;
+        }
+
         window.onload = function() {
             initializeChartData();
             updateChart();
+            updateAnalysis();
         };
     </script>
 </body>
