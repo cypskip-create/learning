@@ -13,7 +13,7 @@
             text-align: center;
             margin: 50px;
             padding: 20px;
-            background-color: #d7d0d0;
+            background-color: #535151;
         }
         h1 {
             color: #0a0202;
@@ -355,14 +355,200 @@
         #priceChart {
             max-height: 400px;
         }
+        .page{
+            display: block;
+        }
+        .page.hidden{
+            display: none;
+        }
+        .trading-layout{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:30px;
+            margin:30px 0;
+        }
+        .trading-left, .trading-right{
+            background-color:white;
+            padding:25px;
+            border-radius:15px;
+            box-shadow:0 4px 12px rgba(0,0,0,0.1);
+
+        }
+        .stock-selector h3{
+            margin-bottom: 15px;
+            color:#333
+        }
+        #trade-stock{
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            background-color: white;
+        }
+        .stock-info h4{
+            margin:0 0 15px 0;
+            color:#2c5f2d;
+            font-size:18px;
+
+        }
+        .current-price{
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+        .price-change{
+            display:flex;
+            justify-content: space-between;
+            align-items:center;
+        }
+        .price-change{
+            font-weight:bold;
+        }
+        .trade-type-tabs{
+            display: flex;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 20px 5px rgba(0,0,0,0.1);
+        }
+        .trade-tab{
+            flex:1;
+            padding: 15px ;
+            border:none;
+            background-color:#f0f0f0;
+            color:#333;
+            font-size:16px;
+            font-weight: bold;
+            cursor:pointer;
+            transition: background-color 0.3s ease;
+        }
+        .trade-tab:hover{
+            background-color: #d5dbdb;
+            color: white;
+
+        }
+        .trade-tab.see.active{
+            background-color:#e74c3c;
+
+        }
+        .form-group{
+            margin-bottom:20px;
+        }
+        .form-group label{
+            display:block;
+            margin-bottom:8px;
+            font-weight:600;
+            color:#555;
+        }
+        .form-group input{
+            width:100%;
+            padding:12px;
+            border:2px solid #ddd;
+            border-radius:8px;
+            font-size:16px;
+            box-sizing: border-box;
+        }
+        .form-group input:focus{
+            border-color:#2c5f2d;
+            box-shadow:0 0 5px rgba(44,95,45,0.3);
+            outline:none;
+        }
+        .total-display{
+            background-color:#f8f9fa;
+            padding:12px;
+            border-radius:8px;
+            font-size:18px;
+            font-weight:bold;
+            color:#2c5f2d;
+            border:2px solid #ddd;
+        }
+        .account-balance{
+            margin:20px 0;
+            padding: 15px;
+            background-color: #e8f5e8;
+            border-radius:8px;
+            text-align:center;
+            
+        }
+        .execute-btn{
+            width:100%;
+            padding: 15px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+
+        }
+        .execute-btn:disabled{
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+
+        }
+        .execute-btn:hover:not(:disabled){
+            background-color:#229954;
+            transform: translateY(-2px);
+        }
+        .execute-btn.sell{
+            background-color: #e74c3c;
+        }
+        .execute-btn.sell:hover:not(:disabled){
+            background-color: #c0392b;
+
+        }
+        .recent-trades{
+            margin-top: 30px;
+            background-color: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+
+        }
+        .recent-trades h3{
+            margin-bottom: 20px;
+            color:#333;
+            border-bottom: 2px solid #2c5f2d;
+            padding-bottom: 10px;
+        }
+        .trade-item{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #2c5f2d;
+        }
+        .trade-item.sell{
+            border-left-color: #e74c3c;
+
+        }
+        @media (max-width: 768px){
+            .trading-layout{
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .price-display{
+                flex-direction:column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
     </style>
 </head>
 <body>
-
+    
     <div class="header">
         <h1>Afrifinance</h1>
         <p>Your Gateway to African Financial Markets</p>
     </div>
+    <div id="dashboard-page" class="page">
     <p>Welcome to Afrifinance</p>
     <section>
         <div class="search-section">
@@ -540,16 +726,81 @@
                 <p class="change negative">Change: -0.30 (-2.78%)</p>
             </div>
         </div>
+        <div id="trading-page" class="page" style="display:none;">
+            <h2>Trading Page</h2>
+            
+            <div class="trading-layout">
+                <div class="trading-left">
+                    <div class="stock-selector">
+                        <h3>select stock to trade</h3>
+                        <select id="trade-stock" onchange="selectTradestock()">
+                            <option value="">choose a stock...</option>
+                            <option value="SAFCOM">SAFCOM - Safaricom PLC</option>
+                            <option value="EQTY">EQTY - Equity Group Holdings PLC</option>
+                            <option value="KCB">KCB - KCB Group PLC</option>
+                            <option value="NBK">NBK - National Bank of Kenya</option>
+                            <option value="COOP">COOP - Co-operative Bank of Kenya</option>
+                            <option value="BAT">BAT - British American Tobacco Kenya</option>
+
+
+                        </select>
+                    </div>
+                    <div id="selected-stock-info" class="stock-info" style="display:none;">
+                        <h4 id="stock-name">stock name</h4>
+                        <div class="price display">
+                            <span class="current-price" id="current-price">KES 0.00</span>
+                            <span class="price-change" id="price-change">+0.00 (0.00%)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="trading-right">
+                    <div class="order-form">
+                        <div class="tdare-type-tabs">
+                            <button class="trade-tab active" onclick="settradetype('buy')">BUY</button>
+                            <button class="trade-tab" onclick="settradetype('sell')">SELL</button>
+                        </div>
+
+                        <div class="form-groups">
+                            <label>Number of shares</label>
+                            <input type="number" id="shares" placeholder="enter number of shares "min="1" onchange="calculatetotal()">
+                        </div>
+
+                        <div class="form-group">
+                            <label>total cost</label>
+                            <div class="total-display" id="total-cost">KES 0.00</div>
+                        </div>
+
+                        <div class="account-balance">
+                            <span>Available Balance: <strong id="balance">KES 50,000.00</strong></span>
+                        </div>
+
+                        <button class="execute-btn" id="execute-btn" onclick="executetrade()" disabled>
+                            place buy order
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="recent-trades">
+                <h3>Recent Trades</h3>
+                <div id="trade-list">
+                    <p>No trades yet. Start trading to see your transaction history!</p>
+                </div>
+            </div>
+        </div>
     </section>
     <div class="actions">
         <button class="btn" onclick="refreshData()">Refresh Data</button>
         <button class="btn" onclick="viewPortfolio()">View Portfolio</button>
         <button class="btn" onclick="placeOrder()">Place Order</button>
+        <button class="btn" onclick="showPage('trading')">Go to Trading</button>
+    </div>
     </div> 
     <div class="footer">
         <p>&copy; 2024 Afrifinance. All rights reserved.</p>
         <p>Contact:</p>
     </div>
+    
 
     <script>
         let stocks = [
@@ -831,6 +1082,7 @@
                 data.prices.push(parseFloat(newPrice.toFixed(2)));
             }
             updateChart();
+            updateAnalysis();
             alert('Added 10 more days of price data!');
         }
 
@@ -926,6 +1178,175 @@
             updateChart();
             updateAnalysis();
         };
+        let currentTradeType='buy';
+        let userBalance = 50000;
+        let tradeHistory =[];
+        function showpage(pageid){
+            document.getelementarybyid('dashboard-page').style.display ='none';
+            document.getelementarybyid('trading-page').style.display='none';
+            document.getelementarybyid(pageid+'-page').style.display='block';
+            document.querySelectorAll('.nav-link').foreach(link =>{
+                link.classlist.remove('active');
+            });
+            document.getelementarybyid('nav-'+pageid).classlist.add('active');
+
+        }
+        function selectTradeStock(){
+            let selectedsymbol=document.getElementById('trade-stock').value;
+
+            if(!selectedsymbol){
+                document.getElementById('selected-stock-info').style.display='none';
+                document.getElementById('execute-btn').disabled=true;
+                return;
+            }
+            let stock=stock.finds(s=>s.symbol===selectedsymbol);
+
+            document.getElementById('stock-name').text.content=`${stock.symbol}-${stock.name}`;
+            document.getElementById('current-price').text.content=`KES ${stock.price.tofixed(2)}`;
+
+            let changetext=stock.change >= 0 ? `+${stock.change.tofixed(2)}`:stock.change.tofixed(2);
+            let changepercent=stock.change >= 0 ? `+${stock.changepercent.tofixed(2)}` : stock.changepercent.tofixed(2);
+            document.getElementById('price-change').text.content = `${changeText} (${changepercent}%)`;
+            document.getElementById('selected-stock-info').style.display='block';
+
+            calculatetotal();
+        }
+        function settradetype(type){
+            currentTradeType=type;
+            document.querySelectorAll('.trade-tab').foreach(tab=> {
+                tab.classlist.remove('activate','sell');
+            });
+            let activetab=document.querySelector(`[onclick="settradetype('${type}')"]`);
+            activetab.classlist.add('active');
+
+            if (type=== 'sell'){
+                activetab.classlist.add('sell');
+                document.getElementById('execute-btn').textcontent = 'place sell order';
+                document.getElementById('execute-btn').classname = 'execute-btn sell';
+
+            }
+            else{
+                document.getElementById('execute-btn').textcontent = 'place buy order';
+                document.getElementById('execute-btn').classname = 'execute-btn';
+
+            }
+            calculatetotal();
+        }
+        function calculatetotal(){
+            let shares = parseint(document.getElementById('shares').value)|| 0;
+            let price = parsefloat(document.getElementById('share-price').value)|| 0;
+            let total = shares * price;
+
+            document.getElementById('total-cost').textcontent = `KES ${total.tofixed(2)}`;
+            document.getElementById('balance').textContent = `KES ${userBalance.tofixed(2)}`;
+
+            let canexecute = false;
+
+            if (shares > 0 && price > 0){
+                if(currentTradeType === 'buy'){
+                    canexecute = total <= userBalance;
+                }
+                else{
+                    let selectedsymbol = document.getElementById('trade-stock').value;
+                    let holding = portfolio.find(p => p.symbol === selectedSymbol);
+                    canexecute = holding && holding.shares >= shares;
+
+                }
+            }
+            document.getElementById('execute-btn').disabled = !canexecute;
+        }
+
+        function executetrade() {
+            let selectedsymbol = document.getElementById('trade-stock').value;
+            let shares = parseint(document.getElementById('shares').value);
+            let price = parsefloat(document.getElementById('share-price').value);
+            let total = shares * price;
+            let stock = stocks.find(s => s.symbol === selectedsymbol);
+            if (currenttradetype === 'buy'){
+                userBalance -= total;
+
+                let existingHolding = portfolio.find(p => p.symbol === selectedsymbol);
+                if (existingHolding){
+                    let totalshares = existingholding.shares + shares;
+                    let totalcost = (existingholding.shares * existingholding.buyprice) + total;
+                    existingholding.share = totalshares;
+                    existingholding.buyprice = totalcost / totalshares;
+                }
+                else{
+                    porfolio.push({
+                        symbol: selectedsymbol,
+                        shares:shares,
+                        buyprice: price
+                    });
+                }
+                alert(`successfully bought ${shares} shares of ${selectedsymbol} for KES ${total.tofixed(2)}!`);  
+            }
+            else{
+                userBalance += total;
+                let holding = portfolio.find(p => p.symbol === selectedsymbol);
+                holding.shares -=shares;
+                if (holding.shares === 0){
+                    portfolio = portfolio.filter(p => p.symbol !== selectedsymbol);
+                }
+                alert(`successfully sold ${shares} shares of ${selectedsymbol} for KES ${total.tofixed(2)}!`);
+
+            }
+            tradeHistory.unshift({
+                type: currentTradeType,
+                symbol:currentsymbol,
+                name:stock.name,
+                shares: shares,
+                price:price,
+                total:total,
+                timestamp: new Date()
+            });
+            updatetradehistory();
+            updateportfoliodisplay();
+            calculatetotal();
+
+            document.getElementById('shares').value = '';
+            document.getElementById('total-cost').textcontent = 'KES 0.00';
+            
+        }
+        
+        function updatetradehistory(){
+            let tradeslist = document.getelementarybyid('trades-list');
+
+            if (tradehistory.length === 0){
+                tradelist.innerHTML = '<p>No tradesyet. start trading to see your transaction history!</p>';
+                return;
+            }
+            tradelist.innerHTML = '';
+
+            tradehistory.slice(0,10).foreach(trade => {
+                let tradediv = document.createelement('div');
+                tradediv.classname = 'trade-item ${trade.type}';
+
+                tradediv.innerHTML = `
+                <div>
+                    <strong>${trade.type.touppercase()}</strong> ${trade.shares}shares of ${trade.symbol}
+                    <br><small>${trade.timestamp.tolocalestring()}</small>
+                </div>
+                <div style="text-align: right;">
+                    <div>KES ${trade.price.tofixed(2)} per share</div>
+                    <div><strong>total: KES ${trade.total.tofixed(2)}</strong></div>
+                </div>
+            `;
+
+            trade.list.appendchild(tradediv);
+            });
+        }
+
+        // Fix showPage navigation and related trading logic
+        function showPage(pageId) {
+            document.getElementById('dashboard-page').style.display = 'none';
+            document.getElementById('trading-page').style.display = 'none';
+            if (pageId === 'dashboard') {
+                document.getElementById('dashboard-page').style.display = 'block';
+            } else if (pageId === 'trading') {
+                document.getElementById('trading-page').style.display = 'block';
+            }
+        }
     </script>
 </body>
 </html>
