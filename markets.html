@@ -12,7 +12,7 @@
         }
         body {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2);
+            background: linear-gradient(135deg, #252526 0%, #242425);
             min-height: 100vh;
             padding: 20px;
             color:#ffffff;
@@ -20,7 +20,7 @@
         .container{
             max-width: 100%;
             min-height: 100vh;
-            background: white;
+            background: rgb(25, 24, 24);
         }
         .header{
             background:#1a1a1a;
@@ -89,7 +89,7 @@
             white-space: nowrap;
         }
         .tab.active{
-            background: #fff;
+            background: white;
             color: #1a1a1a;
         }
         .tab:hover:not(.active){
@@ -273,7 +273,158 @@
                 <button class="tab active">📈 stocks</button>
                 <button class="tab">₿ Crypto</button>
                 <button class="tab">📊 ETFS </button>
-                
+                <button class="tab">📋 Options</button>
+                <button class="tab">🏗 Commodities</button>
+                <button class="tab">🏦 Bonds</button>
+            </div>
+            <div class="market-sections">
+                <div class="market-section">
+                    <div class="market-header">
+                        <h3 class="section-title">📈 Top Gainers</h3>
+                        <a href="#" class="view-all">View All</a>
+                    </div>
+                    <div class="stock-list">
+                        <div class="stock-item">
+                            <div class="stock-info">
+                                <h4>EQTY</h4>
+                                <p>Equity Group</p>
+                            </div>
+                            <div class="stock-price">
+                                <div class="price">KES 62.50</div>
+                                <div class="change positive">+13.12%</div>
+                            </div>
+                        </div>
+
+                        <div class="stock-item">
+                            <div class="stock-info">
+                                <h4>SAFCOM</h4>
+                                <p>Safaricom PLC</p>
+                            </div>
+                            <div class="stock-price">
+                                <div class="price">KES 12.85</div>
+                                <div class="change positive">+1.18%</div>
+                            </div>
+                        </div>
+
+                        <div class="stock-item">
+                            <div class="stock-info">
+                                <h4>KCB</h4>
+                                <p>KCB Group</p>
+                            </div>
+                            <div class="stock-price">
+                                <div class="price">KES 45.20</div>
+                                <div class="change positive">+0.85%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="market-section">
+                    <div class="section-header">
+                        <h3 class="section-title">📉 Top LOsers</h3>
+                        <a href="#" class="view-all">View All</a>
+                    </div>
+                    <div class="stock-list">
+                        <div class="stock-item">
+                            <div class="stock-info">
+                                <h4>BAMB</h4>
+                                <p>Bamburi Cement</p>
+                            </div>
+                            <div class="stock-price">
+                                <div class="price">KES 85.30</div>
+                                <div class="change negative">-2.4%</div>
+                            </div>
+                        </div>
+
+                        <div class="stock-item">
+                            <div class="stock-info">
+                                <h4>EABL</h4>
+                                <p>EABL</p>
+                            </div>
+                            <div class="stock-price">
+                                <div class="price">KES 142.00</div>
+                                <div class="change negative">-1.8%</div>
+                            </div>
+                        </div>
+
+                        <div class="stock-item">
+                            <div class="stock-info">
+                                <h4>SCBK</h4>
+                                <p>Standard Chartered</p>
+                            </div>
+                            <div class="stock-price">
+                                <div class="price">KES 168.50</div>
+                                <div class="change negative">-0.9%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="indices-section">
+                <h3>Major Indices</h3>
+                <div class="indices-list">
+                    <div class="index-item">
+                        <div class="index-info">
+                            <h4>NSE 20</h4>
+                            <div class="value">1,847.23</div>
+                        </div>
+                        <div class="index-change">
+                            <span class="change-icon positive">📈</span>
+                            <span class="change-text positive">+1.2%</span>
+                        </div>
+                    </div>
+
+                    <div class="index-item">
+                        <div class="index-info">
+                            <h4>NSE 25</h4>
+                            <div class="value">3,542.87</div>
+                        </div>
+                        <div class="index-change">
+                            <span class="change-icon positive">📈</span>
+                            <span class="change-text positive">+0.8%</span>
+                        </div>
+                    </div>
+
+                    <div class="index-item">
+                        <div class="index-info">
+                            <h4>All Share</h4>
+                            <div class="value">112.45</div>
+                        </div>
+                        <div class="index-change">
+                            <span class="change-icon negative">📉</span>
+                            <span class="change-text negative">-0.3%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bottom-nav">
+            <div class="nav-links"style="flex-direction: row;align-items: stretch; gap: 130px";>
+                <a href="homepage.html" class="nav-link">
+                    <div class="nav-icon">🏠</div>
+                    <div>Home</div>
+                </a>
+                <a href="markets.html" class="nav-link">
+                    <div class="nav-icon">📈</div>
+                    <div>markets</div>
+                </a>
+                <a href="news.html" class="nav-link active">
+                    <div class="nav-icon">📰</div>
+                    <div>News</div>
+                </a>
+                <a href="discover.html" class="nav-link">
+                    <div class="nav-icon">🔍</div>
+                    <div>Discover</div>
+                </a>
+                <a href="portfolio.html" class="nav-link">
+                    <div class="nav-icon">⏱</div>
+                    <div>Portfolio</div>
+                </a>
+                <a href="account.html" class="nav-link">
+                    <div class="nav-icon">👤</div>
+                    <div>Account</div>
+                </a>
             </div>
         </div>
     </div>
