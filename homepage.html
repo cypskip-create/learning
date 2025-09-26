@@ -1,1352 +1,513 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Afrifinance</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chart.js/3.9.1/chart.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AfriFinance</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 50px;
-            padding: 20px;
-            background-color: #535151;
-        }
-        h1 {
-            color: #0a0202;
-            font-size: 48px;
-        }
-        p {
-            font-size: 16px;
-            line-height: 1.5;
-        }
-        h2 {   
-            color: #333;
-            font-size: 36px;
-            margin-top: 40px;
-        }
-        div {
-            border: 1px solid #ccc;
-            padding: 20px;
-            margin: 20px auto;
-            background-color: #f9f9f9;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        h3 {
-            color: #555;
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-        .positive {
-            color: green;
-            font-weight: bold;
-        }
-        .negative {
-            color: red;
-            font-weight: bold;
-        }
-        .header {
-            font-size: 20px;
-            margin: 50px -50px 40px -50px;
-            background-color: #cef1da;
-            color: rgb(11, 0, 0);
-            padding: 30px;
-            text-align: center;
-        }
-        .header h1 {
+        * {
             margin: 0;
-            font-size: 36px;
-        }
-        .header p {
-            margin: 10px 0 0 0;
-            font-size: 16px;
-        }
-        .market-cards {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin: 20px 0;
-            flex-wrap: wrap;
-            flex-direction: row;
-            border: none;
-            background: none;
-            box-shadow: none;
             padding: 0;
-        }
-        .market-card{
-            text-align: center;
-            background-color: #f8f9fa;
-            width: 150px;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            border: 1px solid #ccc;
-            margin: 0;
-        }
-        .market-card h4 { 
-           margin: 0 0 10px 0;
-           font-size: 16px;
-           color:#333
-        }
-        .index-value {
-            font-size: 24px;
-            font-weight: bold;
-            margin: 10px 0;
-            color: #333;
-        }
-        .stock-grid {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 30px;
-            flex-wrap: wrap;
-            margin: 20px;
-        }
-        .stock-card {
-            border-radius: 10px;
-            padding: 20px;
-            width: 250px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            background-color: #fff;
-        }
-        .actions{
-            margin-top: 40px;
-            text-align: center;
-        }
-        .btn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 12px 25px;
-            margin: 0 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .btn:hover {
-            background-color: #45a049;
-        }
-        .watchlist {
-            border: 2px dashed #ccc;
-            padding: 20px;
-            margin: 30px auto;
-            background-color: #f0f0f0;
-            width: 80%;
-            border-radius: 10px;
-            text-align: center;
-        }
-        #watchlist-items {
-                margin-top: 20px;
-        }
-        .watchlist-item {
-                padding: 10px;
-                border-bottom: 1px solid #ccc;
-                background-color: #fff;
-                margin: 5px 0;
-                border-radius: 5px;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-
-        }
-        .stock-card:hover {
-            background-color: #f0f8f0;
-            cursor: pointer;
-            transform: translateY(-2px);
-            transition: all 0.3s ease;
-        }
-        .search-section {
-            margin: 30px 0;
-            text-align: center;
-        }
-        #stock-search {
-            width: 300px;
-            padding: 12px 20px;
-            outline: none;
-            text-align: center;
-            font-size: 16px;
-            border: 2px solid #ddd;
-            border-radius: 25px;
-        }
-        #stock-search:focus {
-            border-color: #2c5f2d;
-            box-shadow: 0 0 10px rgba(44, 95, 45, 0.3);
-        }
-        .stock-card.hidden {
-            display: none;
-        }
-        .portfolio-section {
-            margin: 30px auto;
-            width: 90%;
-            border-radius: 15px;
-            background-color: #f8f9fa;
-            padding: 25px;
-            margin-top: 40px;
-            text-align: center;
-            border: 2px solid #e9ecef;
-        }
-        .portfolio-summary {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        .portfolio-card {
-            background-color: #fff;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            width: 200px;
-            text-align: center;
-            min-width: 150px;
-        }
-        .portfolio-value {
-            font-size: 20px;
-            font-weight: bold;
-            color: #333;
-            margin: 5px 0;
-        }
-        .portfolio-change {
-            font-size: 16px;
-            margin: 5px 0;
-            font-weight: bold;
-        }
-        .portfolio-holdings {
-            margin: 5px 0;
-            font-size: 16px;
-            color: #666;
-        }
-        .news-section {
-            margin: 30px auto;
-            width: 90%;
-            border-radius: 15px;
-            background-color: #f8f9fa;
-            padding: 25px;
-            margin-top: 40px;
-            text-align: center;
-            border: 2px solid #e9ecef;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        .news-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            margin-top: 20px;
-        }
-        .news-item {
-            background-color: #fff;
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 4px solid #4CAF50;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            text-align: left;
-            transition: background-color 0.3s ease;
-        }
-        .news-item:hover {
-            background-color: #f0f8f0;
-            cursor: pointer;
-        }
-        .news-date {
-            font-size: 12px;
-            color: #888;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
-        .news-item h4 {
-            margin: 0 0 10px 0;
-            color: #333;
-            font-size: 16px;
-
-        }
-        .news-item p {
-            margin: 0;
-            color: #666;
-            font-size: 14px;
-            line-height: 1.4;
-        }
-        @media (max-width: 768px){
-            body {
-                margin: 20px;
-                padding: 10px;
-            }
-            .header {
-                margin: 20px -20px 30px -20px;
-                padding: 20px;
-            }
-            .header h1 {
-                font-size: 28px;
-            }
-            .market-cards {
-                flex-direction: column;
-                align-items: center;
-            }
-            .market-card {
-                width: 200px;
-            }
-            .stock-grid {
-                flex-direction: column;
-                align-items: center;
-            }
-            .stock-card {
-                width: 280px;
-            }
-            .portfolio-summary {
-                flex-direction: column;
-                align-items: center;
-            }
-            #stock-search {
-                width: 250px;
-                max-width: 300px;
-            }
-            .actions {
-                flex-wrap: wrap;
-            }
-        }
-        .actions {
-            margin-top: 40px;
-            text-align: center;
-            display: flex;
-            justify-content: center;
-            gap: 15px;  
-        }
-        .footer {
-            margin-top: 50px;
-            padding: 25px;
-            background-color: #cef1da;
-            color: rgb(11, 0, 0);
-            text-align: center;
-            border-radius: 10px;
-        }
-        .footer p {
-            margin: 5px 0;
-            font-size: 14px;
-        }
-        .chart-section {
-            margin: 30px auto;
-            width: 90%;
-            border-radius: 15px;
-            background-color: #f8f9fa;
-            padding: 25px;
-            margin-top: 40px;
-            text-align: center;
-            border: 2px solid #e9ecef;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        .chart-controls {
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            text-align: center;
-        }
-        #chart-stock {
-            padding: 10px;
-            font-size: 16px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            outline: none;
-        }
-        #priceChart {
-            max-height: 400px;
-        }
-        .page{
-            display: block;
-        }
-        .page.hidden{
-            display: none;
-        }
-        .trading-layout{
-            display:grid;
-            grid-template-columns:1fr 1fr;
-            gap:30px;
-            margin:30px 0;
-        }
-        .trading-left, .trading-right{
-            background-color:white;
-            padding:25px;
-            border-radius:15px;
-            box-shadow:0 4px 12px rgba(0,0,0,0.1);
-
-        }
-        .stock-selector h3{
-            margin-bottom: 15px;
-            color:#333
-        }
-        #trade-stock{
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-            background-color: white;
-        }
-        .stock-info h4{
-            margin:0 0 15px 0;
-            color:#2c5f2d;
-            font-size:18px;
-
-        }
-        .current-price{
-            font-size: 24px;
-            font-weight: bold;
-            color: #333;
-        }
-        .price-change{
-            display:flex;
-            justify-content: space-between;
-            align-items:center;
-        }
-        .price-change{
-            font-weight:bold;
-        }
-        .trade-type-tabs{
-            display: flex;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 20px 5px rgba(0,0,0,0.1);
-        }
-        .trade-tab{
-            flex:1;
-            padding: 15px ;
-            border:none;
-            background-color:#f0f0f0;
-            color:#333;
-            font-size:16px;
-            font-weight: bold;
-            cursor:pointer;
-            transition: background-color 0.3s ease;
-        }
-        .trade-tab:hover{
-            background-color: #d5dbdb;
-            color: white;
-
-        }
-        .trade-tab.see.active{
-            background-color:#e74c3c;
-
-        }
-        .form-group{
-            margin-bottom:20px;
-        }
-        .form-group label{
-            display:block;
-            margin-bottom:8px;
-            font-weight:600;
-            color:#555;
-        }
-        .form-group input{
-            width:100%;
-            padding:12px;
-            border:2px solid #ddd;
-            border-radius:8px;
-            font-size:16px;
             box-sizing: border-box;
         }
-        .form-group input:focus{
-            border-color:#2c5f2d;
-            box-shadow:0 0 5px rgba(44,95,45,0.3);
-            outline:none;
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a1a;
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 0;
         }
-        .total-display{
-            background-color:#f8f9fa;
-            padding:12px;
-            border-radius:8px;
-            font-size:18px;
-            font-weight:bold;
-            color:#2c5f2d;
-            border:2px solid #ddd;
+        
+        .container {
+            max-width: 100%;
+            min-height: 100vh;
+            background: #1a1a1a;
         }
-        .account-balance{
-            margin:20px 0;
-            padding: 15px;
-            background-color: #e8f5e8;
-            border-radius:8px;
-            text-align:center;
-            
-        }
-        .execute-btn{
-            width:100%;
-            padding: 15px;
-            background-color: #27ae60;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-
-        }
-        .execute-btn:disabled{
-            background-color: #bdc3c7;
-            cursor: not-allowed;
-            transform: none;
-
-        }
-        .execute-btn:hover:not(:disabled){
-            background-color:#229954;
-            transform: translateY(-2px);
-        }
-        .execute-btn.sell{
-            background-color: #e74c3c;
-        }
-        .execute-btn.sell:hover:not(:disabled){
-            background-color: #c0392b;
-
-        }
-        .recent-trades{
-            margin-top: 30px;
-            background-color: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-
-        }
-        .recent-trades h3{
-            margin-bottom: 20px;
-            color:#333;
-            border-bottom: 2px solid #2c5f2d;
-            padding-bottom: 10px;
-        }
-        .trade-item{
+        
+        /* Header */
+        .header {
+            background: #1a1a1a;
+            padding: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px;
-            margin: 15px;
-            background-color: #f8f9fa;
+            border-bottom: 1px solid #333;
+        }
+        
+        .header h1 {
+            color: #00ff88;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        .header p {
+            color: #888;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+        
+        .header-right {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .notification-badge {
+            background: #00ff88;
+            color: #1a1a1a;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 20px;
+            padding-bottom: 100px;
+        }
+        
+        /* Morning Brief */
+        .morning-brief {
+            background: #2a2a2a;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+            border-left: 4px solid #00ff88;
+        }
+        
+        .morning-brief h2 {
+            color: #00ff88;
+            font-size: 18px;
+            margin-bottom: 16px;
+        }
+        
+        .brief-date {
+            color: #888;
+            font-size: 14px;
+            float: right;
+            margin-top: -35px;
+        }
+        
+        .brief-item {
+            margin-bottom: 12px;
+        }
+        
+        .brief-item h3 {
+            color: #fff;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+        
+        .brief-item p {
+            color: #aaa;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .key-focus {
+            background: #2d4a2d;
+            border: 1px solid #00ff88;
             border-radius: 8px;
-            border-left: 4px solid #2c5f2d;
+            padding: 12px;
+            margin-top: 12px;
         }
-        .trade-item.sell{
-            border-left-color: #e74c3c;
-
+        
+        .key-focus-label {
+            color: #00ff88;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
         }
-        @media (max-width: 768px){
-            .trading-layout{
+        
+        /* NSE Fund Tracking */
+        .fund-tracking {
+            margin-bottom: 24px;
+        }
+        
+        .fund-tracking h2 {
+            color: #00ff88;
+            font-size: 18px;
+            margin-bottom: 16px;
+        }
+        
+        .indices-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+        }
+        
+        .index-card {
+            background: #2a2a2a;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+        
+        .index-name {
+            color: #aaa;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+        
+        .index-value {
+            color: #fff;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .index-change {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .positive {
+            color: #00ff88;
+        }
+        
+        .negative {
+            color: #ff6b6b;
+        }
+        
+        /* Sections Grid */
+        .sections-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .section {
+            background: #2a2a2a;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .section h3 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .section-icon {
+            color: #00ff88;
+        }
+        
+        .stock-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #333;
+        }
+        
+        .stock-item:last-child {
+            border-bottom: none;
+        }
+        
+        .stock-info h4 {
+            color: #fff;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+        
+        .stock-info p {
+            color: #aaa;
+            font-size: 14px;
+        }
+        
+        .stock-price {
+            text-align: right;
+        }
+        
+        .stock-price .price {
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .stock-price .change {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        /* Watchlist Summary */
+        .watchlist-summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .watchlist-card {
+            background: #1e3a1e;
+            border: 1px solid #00ff88;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+        
+        .watchlist-card h4 {
+            color: #00ff88;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+        
+        .watchlist-card .value {
+            color: #00ff88;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .watchlist-card .change {
+            color: #aaa;
+            font-size: 12px;
+        }
+        
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #1a1a1a;
+            border-top: 1px solid #333;
+            padding: 12px 0;
+        }
+        
+        .nav-links {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        
+        .nav-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #888;
+            font-size: 12px;
+            transition: color 0.3s;
+        }
+        
+        .nav-link.active {
+            color: #00ff88;
+        }
+        
+        .nav-link:hover {
+            color: #00ff88;
+        }
+        
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 4px;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .sections-grid {
                 grid-template-columns: 1fr;
-                gap: 20px;
+                gap: 16px;
             }
-            .price-display{
-                flex-direction:column;
-                align-items: flex-start;
-                gap: 10px;
+            
+            .indices-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .main-content {
+                padding: 16px;
             }
         }
     </style>
 </head>
 <body>
-    
-    <div class="header">
-        <h1>Afrifinance</h1>
-        <p>Your Gateway to African Financial Markets</p>
-    </div>
-    <div id="dashboard-page" class="page">
-    <p>Welcome to Afrifinance</p>
-    <section>
-        <div class="search-section">
-            <h2>Search Stocks</h2>
-            <input type="text" id="stock-search" placeholder="Search for a stock (e.g. SAFCOM, KCB)..." onkeyup="searchStocks()">
-        </div>
-    </section>
-    <section>
-        <h2>Market Overview</h2>
-        <div class="market-cards">
-            <div class="market-card">
-                <h4>NSE 20</h4>
-                <p class="index-value">1,847.23</p>
-                <p class="positive">+12.47 (+0.68%)</p>
-            </div> 
-            <div class="market-card">
-                <h4>NSE 25</h4>
-                <p class="index-value">3,124.67</p>
-                <p class="negative">-8.32 (-0.27%)</p>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>AfriFinance</h1>
+                <p>Good morning, Investor</p>
             </div>
-            <div class="market-card">
-                <h4>NASI</h4>
-                <p class="index-value">156.89</p>
-                <p class="positive">+2.14 (+1.38%)</p>
+            <div class="header-right">
+                <div>🔍</div>
+                <div class="notification-badge">2</div>
+                <div>🔔</div>
             </div>
         </div>
-    </section>
-    <section>
-        <h2>My Watchlist</h2>
-        <div class="watchlist">
-            <p><strong>Click on a stock to add it to your watchlist.</strong></p>
-            <div id="watchlist-items">
-            </div>
-        </div>
-        <div class="portfolio-section">
-            <h2>My Portfolio</h2>
-            <div class="portfolio-summary">
-                <div class="portfolio-card">
-                    <h4>Total Value</h4>
-                    <p class="portfolio-value" id="total-value">KES 0.00</p>
-                </div>
-                <div class="portfolio-card">
-                    <h4>Today's Change</h4>
-                    <p class="portfolio-change" id="total-change">KES 0.00 (+0.00%)</p>
-                </div>
-                <div class="portfolio-card">
-                    <h4>Total Holdings</h4>
-                    <p class="portfolio-holdings" id="total-holdings">0 stocks</p>
-                </div>
-            </div>
-            <div id="portfolio-stocks">
-                <p>No stocks in your portfolio. <button onclick="addSampleHoldings()" class="btn" style="padding: 5px 15px; font-size: 14px;">Add Sample Holdings</button></p>
-            </div>
-        </div>
-        <div class="news-section">
-            <h2>Latest Financial News</h2>
-            <div class="news-container">
-                <div class="news-item">
-                    <div class="news-date">Today</div>
-                    <h4>Safaricom Reports Strong Q3 Results</h4>
-                    <p>The Nairobi Securities Exchange reached record levels today, driven by strong performances in the banking and telecommunications sectors.</p>
-                </div>
-                <div class="news-item">
-                    <div class="news-date">Yesterday</div>
-                    <h4>NSE 20 Index Hits Monthly High</h4>
-                    <p>The Nairobi Securities Exchange reached record levels today, driven by strong performances in the banking and telecommunications sectors.</p>
-                </div>
-            </div>
-        </div>
-        <div class="chart-section">
-            <h2>Price Chart</h2>
-            <div class="chart-controls">
-                <select id="chart-stock" onchange="updateChart(); updateAnalysis();">
-                    <option value="SAFCOM">SAFCOM - Safaricom PLC</option>
-                    <option value="EQTY">EQTY - Equity Group Holdings PLC</option>
-                    <option value="KCB">KCB - KCB Group PLC</option>
-                    <option value="NBK">NBK - National Bank of Kenya</option>
-                    <option value="COOP">COOP - Co-operative Bank of Kenya</option>
-                    <option value="BAT">BAT - British American Tobacco Kenya</option>
-                    <option value="EABL">EABL - East African Breweries Limited</option>
-                </select>
-                <button onclick="generateMoreData()" class="btn" style="padding: 5px 15px; font-size: 14px;">Generate More Data</button>
-            </div>
-            <canvas id="priceChart" width="400" height="200"></canvas>
-        </div>
-        <!-- Technical Analysis Section -->
-        <div class="chart-section" style="margin-top:20px;">
-            <h2>Technical Analysis</h2>
-            <div class="chart-controls">
-                <select id="analysis-stock" onchange="updateAnalysis()">
-                    <option value="SAFCOM">SAFCOM - Safaricom PLC</option>
-                    <option value="EQTY">EQTY - Equity Group Holdings PLC</option>
-                    <option value="KCB">KCB - KCB Group PLC</option>
-                    <option value="NBK">NBK - National Bank of Kenya</option>
-                    <option value="COOP">COOP - Co-operative Bank of Kenya</option>
-                    <option value="BAT">BAT - British American Tobacco Kenya</option>
-                    <option value="EABL">EABL - East African Breweries Limited</option>
-                </select>
-            </div>
-            <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:30px;">
-                <div style="min-width:220px;">
-                    <h4>Moving Average (5 days)</h4>
-                    <p id="ma5" class="analysis-value">--</p>
-                    <p id="ma5-trend" class="analysis-signal">--</p>
-                </div>
-                <div style="min-width:220px;">
-                    <h4>Trend</h4>
-                    <p id="trend" class="analysis-value">--</p>
-                    <p id="trend-strength" class="analysis-signal">--</p>
-                </div>
-                <div style="min-width:220px;">
-                    <h4>Volatility</h4>
-                    <p id="volatility" class="analysis-value">--</p>
-                    <p id="volatility-level" class="analysis-signal">--</p>
-                </div>
-                <div style="min-width:220px;">
-                    <h4>Recommendation</h4>
-                    <p id="recommendation" class="analysis-value">--</p>
-                    <p id="confidence" class="analysis-signal">--</p>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section>
-        <h2>Stocks</h2>
-        <div class="stock-grid">
-            <div class="stock-card" id="SAFCOM" onclick="addToWatchlist('SAFCOM')">
-                <h3>SAFCOM - Safaricom PLC</h3>
-                <p class="price">Price: KES 26.80</p>
-                <p class="change positive">Change: +1.20 (+4.69%)</p>
-            </div>
-            <div class="stock-card" id="EQTY" onclick="addToWatchlist('EQTY')">
-                <h3>EQTY - Equity Group Holdings PLC</h3>
-                <p class="price">Price: KES 45.00</p>
-                <p class="change positive">Change: +2.50 (+5.12%)</p>
-            </div>
-            <div class="stock-card" id="KCB" onclick="addToWatchlist('KCB')">
-                <h3>KCB - KCB Group PLC</h3>
-                <p class="price">Price: KES 38.50</p>
-                <p class="change negative">Change: -1.80 (-4.91%)</p>
-            </div>
-            <div class="stock-card" id="NBK" onclick="addToWatchlist('NBK')">
-                <h3>NBK - National Bank of Kenya</h3>
-                <p class="price">Price: KES 28.40</p>
-                <p class="change positive">Change: +0.60 (+2.16%)</p>
-            </div>
-            <div class="stock-card" id="COOP" onclick="addToWatchlist('COOP')">
-                <h3>COOP - Co-operative Bank of Kenya</h3>
-                <p class="price">Price: KES 12.75</p>
-                <p class="change negative">Change: -0.20 (-1.55%)</p>
-            </div>
-            <div class="stock-card" id="BAT" onclick="addToWatchlist('BAT')">
-                <h3>BAT - British American Tobacco Kenya</h3>
-                <p class="price">Price: KES 450.00</p>
-                <p class="change positive">Change: +5.00 (+1.12%)</p>
-            </div>
-            <div class="stock-card" id="EABL" onclick="addToWatchlist('EABL')">
-                <h3>EABL - East African Breweries Limited</h3>
-                <p class="price">Price: KES 160.00</p>
-                <p class="change negative">Change: -2.00 (-1.23%)</p>
-            </div>
-            <div class="stock-card" id="SCOM" onclick="addToWatchlist('SCOM')">
-                <h3>SCOM - Standard Chartered Bank Kenya</h3>
-                <p class="price">Price: KES 120.50</p>
-                <p class="change positive">Change: +1.50 (+1.26%)</p>
-            </div>
-            <div class="stock-card" id="JUB" onclick="addToWatchlist('JUB')">
-                <h3>JUB - Jubilee Holdings Limited</h3>
-                <p class="price">Price: KES 200.00</p>
-                <p class="change positive">Change: +3.00 (+1.52%)</p>
-            </div>
-            <div class="stock-card" id="KQ" onclick="addToWatchlist('KQ')">
-                <h3>KQ - Kenya Airways</h3>
-                <p class="price">Price: KES 10.50</p>
-                <p class="change negative">Change: -0.30 (-2.78%)</p>
-            </div>
-        </div>
-        <div id="trading-page" class="page" style="display:none;">
-            <h2>Trading Page</h2>
-            
-            <div class="trading-layout">
-                <div class="trading-left">
-                    <div class="stock-selector">
-                        <h3>select stock to trade</h3>
-                        <select id="trade-stock" onchange="selectTradestock()">
-                            <option value="">choose a stock...</option>
-                            <option value="SAFCOM">SAFCOM - Safaricom PLC</option>
-                            <option value="EQTY">EQTY - Equity Group Holdings PLC</option>
-                            <option value="KCB">KCB - KCB Group PLC</option>
-                            <option value="NBK">NBK - National Bank of Kenya</option>
-                            <option value="COOP">COOP - Co-operative Bank of Kenya</option>
-                            <option value="BAT">BAT - British American Tobacco Kenya</option>
-
-
-                        </select>
-                    </div>
-                    <div id="selected-stock-info" class="stock-info" style="display:none;">
-                        <h4 id="stock-name">stock name</h4>
-                        <div class="price display">
-                            <span class="current-price" id="current-price">KES 0.00</span>
-                            <span class="price-change" id="price-change">+0.00 (0.00%)</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="trading-right">
-                    <div class="order-form">
-                        <div class="tdare-type-tabs">
-                            <button class="trade-tab active" onclick="settradetype('buy')">BUY</button>
-                            <button class="trade-tab" onclick="settradetype('sell')">SELL</button>
-                        </div>
-
-                        <div class="form-groups">
-                            <label>Number of shares</label>
-                            <input type="number" id="shares" placeholder="enter number of shares "min="1" onchange="calculatetotal()">
-                        </div>
-
-                        <div class="form-group">
-                            <label>total cost</label>
-                            <div class="total-display" id="total-cost">KES 0.00</div>
-                        </div>
-
-                        <div class="account-balance">
-                            <span>Available Balance: <strong id="balance">KES 50,000.00</strong></span>
-                        </div>
-
-                        <button class="execute-btn" id="execute-btn" onclick="executetrade()" disabled>
-                            place buy order
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="recent-trades">
-                <h3>Recent Trades</h3>
-                <div id="trade-list">
-                    <p>No trades yet. Start trading to see your transaction history!</p>
-                </div>
-            </div>
-        </div>
-    </section>
-    <div class="actions">
-        <button class="btn" onclick="refreshData()">Refresh Data</button>
-        <button class="btn" onclick="viewPortfolio()">View Portfolio</button>
-        <button class="btn" onclick="placeOrder()">Place Order</button>
-        <button class="btn" onclick="showPage('trading')">Go to Trading</button>
-    </div>
-    </div> 
-    <div class="footer">
-        <p>&copy; 2024 Afrifinance. All rights reserved.</p>
-        <p>Contact:</p>
-    </div>
-    
-
-    <script>
-        let stocks = [
-            { symbol: 'SAFCOM', name: 'Safaricom PLC', price: 26.80, change: 1.20, changePercent: 4.69 },
-            { symbol: 'EQTY', name: 'Equity Group Holdings PLC', price: 45.00, change: 2.50, changePercent: 5.12 },
-            { symbol: 'KCB', name: 'KCB Group PLC', price: 38.50, change: -1.80, changePercent: -4.91 },
-            { symbol: 'NBK', name: 'National Bank of Kenya', price: 28.40, change: 0.60, changePercent: 2.16 },
-            { symbol: 'COOP', name: 'Co-operative Bank of Kenya', price: 12.75, change: -0.20, changePercent: -1.55 },
-            { symbol: 'BAT', name: 'British American Tobacco Kenya', price: 450.00, change: 5.00, changePercent: 1.12 },
-            { symbol: 'EABL', name: 'East African Breweries Limited', price: 160.00, change: -2.00, changePercent: -1.23 },
-            { symbol: 'SCOM', name: 'Standard Chartered Bank Kenya', price: 120.50, change: 1.50, changePercent: 1.26 },
-            { symbol: 'JUB', name: 'Jubilee Holdings Limited', price: 200.00, change: 3.00, changePercent: 1.52 },
-            { symbol: 'KQ', name: 'Kenya Airways', price: 10.50, change: -0.30, changePercent: -2.78 }
-        ];
-
-        let portfolio = [];
-
-        function refreshData() {
-            stocks.forEach(stock => {
-                let priceChange = (Math.random() - 0.5) * 4;
-                stock.price = Math.round((stock.price + priceChange) * 100) / 100;
-                stock.change = Math.round(priceChange * 100) / 100;
-                stock.changePercent = Math.round((priceChange / stock.price) * 10000) / 100;
-            });
-            updateDisplay();
-            alert('Stock prices updated!');
-            addCurrentPriceToChart();
-        }
-
-        function addCurrentPriceToChart() {
-            stocks.forEach(stock => {
-                let data = chartData[stock.symbol];
-                let today = new Date().toLocaleDateString();
-
-                if (data.labels[data.labels.length - 1] !== today) {
-                    data.labels.push(today);
-                    data.prices.push(stock.price);
-
-                    if (data.labels.length > 50) {
-                        data.labels.shift();
-                        data.prices.shift();
-                    }
-                } else {
-                    data.prices[data.prices.length - 1] = stock.price;
-                }
-            });
-            if (priceChart) {
-                updateChart();
-            }
-        }
-
-        function updateDisplay() {
-            stocks.forEach(stock => {
-                let card = document.getElementById(stock.symbol);
-                if (!card) return;
-                let priceElement = card.querySelector('.price');
-                if (priceElement) {
-                    priceElement.textContent = `Price: KES ${stock.price.toFixed(2)}`;
-                }
-                let changeElement = card.querySelector('.change');
-                if (changeElement) {
-                    let sign = stock.change >= 0 ? '+' : '';
-                    changeElement.textContent = `Change: ${sign}${stock.change.toFixed(2)} (${sign}${stock.changePercent.toFixed(2)}%)`;
-                    changeElement.className = 'change ' + (stock.change >= 0 ? 'positive' : 'negative');
-                }
-            });
-            updatePortfolioDisplay();
-        }
-
-        function addToWatchlist(symbol) {
-            let stock = stocks.find(s => s.symbol === symbol);
-            if (!stock) return;
-            let watchlistDiv = document.getElementById('watchlist-items');
-            if (!watchlistDiv) return;
-            if (document.getElementById(`watch-${symbol}`)) {
-                alert(`${symbol} is already in your watchlist!`);
-                return;
-            }
-            let item = document.createElement('div');
-            item.className = 'watchlist-item';
-            item.id = `watch-${symbol}`;
-            item.innerHTML = `
-                <span>${stock.symbol} - KES ${stock.price.toFixed(2)}</span>
-                <button onclick="removeFromWatchlist('${symbol}')" style="background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">Remove</button>
-            `;
-            watchlistDiv.appendChild(item);
-            alert(`${symbol} added to watchlist!`);
-        }
-
-        function removeFromWatchlist(symbol) {
-            let item = document.getElementById(`watch-${symbol}`);
-            if (item) item.remove();
-        }
-
-        function viewPortfolio() {
-            alert('Portfolio View - This would show your stock holdings.');
-        }
-
-        function placeOrder() {
-            alert('Place Order - This would open a buy/sell interface.');
-        }
-
-        function searchStocks() {
-            let searchTerm = document.getElementById('stock-search').value.toLowerCase();
-            stocks.forEach(stock => {
-                let card = document.getElementById(stock.symbol);
-                let stockName = stock.name.toLowerCase();
-                let stockSymbol = stock.symbol.toLowerCase();
-                if (stockName.includes(searchTerm) || stockSymbol.includes(searchTerm)) {
-                    card.classList.remove('hidden');
-                } else {
-                    card.classList.add('hidden');
-                }
-            });
-            if (searchTerm === '') {
-                stocks.forEach(stock => {
-                    let card = document.getElementById(stock.symbol);
-                    card.classList.remove('hidden');
-                });
-            }
-        }
-
-        function addSampleHoldings() {
-            portfolio = [
-                { symbol: 'SAFCOM', name: 'Safaricom PLC', shares: 100, purchasePrice: 25.00 },
-                { symbol: 'EQTY', name: 'Equity Group Holdings PLC', shares: 50, purchasePrice: 40.00 },
-                { symbol: 'KCB', name: 'KCB Group PLC', shares: 75, purchasePrice: 35.00 }
-            ];
-            updatePortfolioDisplay();
-            alert('Sample holdings added to your portfolio!');
-        }
-
-        function updatePortfolioDisplay() {
-            let totalValue = 0;
-            let totalChange = 0;
-            let portfolioDiv = document.getElementById('portfolio-stocks');
-
-            if (portfolio.length === 0) {
-                portfolioDiv.innerHTML = '<p>No stocks in your portfolio. <button onclick="addSampleHoldings()" class="btn" style="padding: 5px 15px; font-size: 14px;">Add Sample Holdings</button></p>';
-                document.getElementById('total-value').textContent = 'KES 0.00';
-                document.getElementById('total-change').textContent = 'KES 0.00 (+0.00%)';
-                document.getElementById('total-holdings').textContent = '0 stocks';
-                document.getElementById('total-change').className = 'portfolio-change';
-                return;
-            }
-            portfolioDiv.innerHTML = '';
-            portfolio.forEach(holding => {
-                let stock = stocks.find(s => s.symbol === holding.symbol);
-                if (!stock) return;
-
-                let currentValue = stock.price * holding.shares;
-                let purchaseValue = holding.purchasePrice * holding.shares;
-                let gainloss = currentValue - purchaseValue;
-                let gainlosspercent = purchaseValue > 0 ? (gainloss / purchaseValue) * 100 : 0;
-
-                totalValue += currentValue;
-                totalChange += gainloss;
-
-                let item = document.createElement('div');
-                item.className = 'portfolio-item';
-                item.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #ccc;">
-                        <div>
-                            <strong>${stock.symbol}</strong> - ${holding.shares} shares
-                            <br><small>Bought at KES ${holding.purchasePrice.toFixed(2)}</small>
-                        </div>
-                        <div style="text-align: right;">
-                            <div>KES ${currentValue.toFixed(2)}</div>
-                            <div class="${gainloss >= 0 ? 'positive' : 'negative'}" style="font-size: 14px;">
-                                ${gainloss >= 0 ? '+' : ''}${gainloss.toFixed(2)} (${gainlosspercent >= 0 ? '+' : ''}${gainlosspercent.toFixed(2)}%)
-                            </div>
-                        </div>
-                    </div>
-                `;
-                portfolioDiv.appendChild(item);
-            });
-
-            let totalChangePercent = (totalValue - totalChange) > 0 ? (totalChange / (totalValue - totalChange)) * 100 : 0;
-
-            document.getElementById('total-value').textContent = `KES ${totalValue.toFixed(2)}`;
-            document.getElementById('total-change').textContent = `KES ${totalChange >= 0 ? '+' : ''}${totalChange.toFixed(2)} (${totalChangePercent >= 0 ? '+' : ''}${totalChangePercent.toFixed(2)}%)`;
-            document.getElementById('total-holdings').textContent = `${portfolio.length} stocks`;
-            document.getElementById('total-change').className = `portfolio-change ${totalChange >= 0 ? 'positive' : 'negative'}`;
-        }
-
-        let chartData = {};
-        let priceChart = null;
-
-        function initializeChartData() {
-            stocks.forEach(stock => {
-                chartData[stock.symbol] = {
-                    labels: [],
-                    prices: []
-                };
-
-                let basePrice = stock.price;
-                for (let i = 29; i >= 0; i--) {
-                    let date = new Date();
-                    date.setDate(date.getDate() - i);
-                    chartData[stock.symbol].labels.push(date.toLocaleDateString());
-
-                    basePrice += (Math.random() - 0.5) * 2;
-                    if (basePrice < stock.price * 0.7) basePrice = stock.price * 0.7;
-                    if (basePrice > stock.price * 1.3) basePrice = stock.price * 1.3;
-
-                    chartData[stock.symbol].prices.push(parseFloat(basePrice.toFixed(2)));
-                }
-            });
-        }
-
-        function updateChart() {
-            let selectedStock = document.getElementById('chart-stock').value;
-            let stock = stocks.find(s => s.symbol === selectedStock);
-            let data = chartData[selectedStock];
-
-            if (priceChart) {
-                priceChart.destroy();
-            }
-
-            let ctx = document.getElementById('priceChart').getContext('2d');
-            priceChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: data.labels,
-                    datasets: [{
-                        label: `${stock.symbol} Price (KES)`,
-                        data: data.prices,
-                        borderColor: stock.change >= 0 ? '#27ae60' : '#e74c3c',
-                        backgroundColor: stock.change >= 0 ? 'rgba(39, 174, 96, 0.1)' : 'rgba(231, 76, 60, 0.1)',
-                        borderWidth: 3,
-                        fill: true,
-                        tension: 0.4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top'
-                        },
-                        title: {
-                            display: true,
-                            text: `${stock.name} - 30 Day Price Movement`
-                        }
-                    },
-                    scales: {
-                        x: {
-                            display: true,
-                            title: {
-                                display: true,
-                                text: 'Date'
-                            }
-                        },
-                        y: {
-                            display: true,
-                            title: {
-                                display: true,
-                                text: 'Price (KES)'
-                            },
-                            beginAtZero: false
-                        }
-                    }
-                }
-            });
-        }
-
-        function generateMoreData() {
-            let selectedStock = document.getElementById('chart-stock').value;
-            let data = chartData[selectedStock];
-            for (let i = 10; i >= 1; i--) {
-                let lastPrice = data.prices[data.prices.length - 1];
-                let newPrice = lastPrice + (Math.random() - 0.5) * 2;
-
-                let date = new Date();
-                date.setDate(date.getDate() + (10 - i + 1));
-
-                data.labels.push(date.toLocaleDateString());
-                data.prices.push(parseFloat(newPrice.toFixed(2)));
-            }
-            updateChart();
-            updateAnalysis();
-            alert('Added 10 more days of price data!');
-        }
-
-        // --- Technical Analysis Section ---
-        function calculateMovingAverage(prices, period) {
-            if (prices.length < period) return null;
-            let sum = 0;
-            for (let i = prices.length - period; i < prices.length; i++) {
-                sum += prices[i];
-            }
-            return sum / period;
-        }
-
-        function calculateTrend(prices) {
-            if (prices.length < 10) return {direction: 'Neutral', strength: 0};
-            let recent = prices.slice(-5);
-            let older = prices.slice(-10, -5);
-            let recentAvg = recent.reduce((a,b) => a + b, 0) / recent.length;
-            let olderAvg = older.reduce((a,b) => a + b, 0) / older.length;
-            let change = ((recentAvg - olderAvg) / olderAvg) * 100;
-            let direction = change > 1 ? 'Bullish' : change < -1 ? 'Bearish' : 'Neutral';
-            let strength = Math.abs(change);
-            return {direction, strength};
-        }
-
-        function calculateVolatility(prices) {
-            if (prices.length < 5) return {level: 0, description:'Low'};
-            let changes =[];
-            for (let i = 1; i < prices.length; i++) {
-                changes.push(Math.abs((prices[i] - prices[i - 1]) / prices[i - 1]) * 100);
-            }
-            let avgVolatility = changes.reduce((a,b) => a + b, 0) / changes.length;
-            let description = avgVolatility > 3 ? 'High' : avgVolatility > 1.5 ? 'Medium' : 'Low';
-            return {level: avgVolatility, description };
-        }
-
-        function generateRecommendation(ma5signal, trend, volatility, currentPrice, ma5) {
-            let score = 0;
-            if (ma5signal === 'Buy signal') score +=2;
-            else if (ma5signal === 'Sell Signal') score -= 2;
-            if (trend.direction === 'Bullish') score += trend.strength > 2 ? 2: 1;
-            else if (trend.direction === 'Bearish') score -= trend.strength > 2 ? 2: 1;
-            if (volatility.description === 'High') score -= 1;
-            let recommendation, confidence;
-            if (score >= 4) { recommendation = 'STRONG BUY'; confidence = 'High'; }
-            else if (score === 3) { recommendation = 'BUY'; confidence = 'High'; }
-            else if (score === 2) { recommendation = 'BUY'; confidence = 'Medium'; }
-            else if (score === 1) { recommendation = 'Hold'; confidence = 'Low'; }
-            else if (score === 0) { recommendation = 'Hold'; confidence = 'Medium'; }
-            else if (score === -1) { recommendation = 'Hold'; confidence = 'Low'; }
-            else if (score === -2) { recommendation = 'Sell'; confidence = 'Medium'; }
-            else { recommendation = 'Strong Sell'; confidence = 'High'; }
-            return {recommendation, confidence};
-        }
-
-        function updateAnalysis() {
-            let selectedStock = document.getElementById('analysis-stock').value;
-            let stock = stocks.find(s => s.symbol === selectedStock);
-            let prices = chartData[selectedStock] ? chartData[selectedStock].prices : [];
-            if (!prices || prices.length < 5) {
-                document.getElementById('ma5').textContent = 'Insufficient Data';
-                document.getElementById('ma5-trend').textContent = '--';
-                document.getElementById('trend').textContent = '--';
-                document.getElementById('trend-strength').textContent = '--';
-                document.getElementById('volatility').textContent = '--';
-                document.getElementById('volatility-level').textContent = '--';
-                document.getElementById('recommendation').textContent = '--';
-                document.getElementById('confidence').textContent = '--';
-                return;
-            }
-            let ma5 = calculateMovingAverage(prices, 5);
-            let ma5signal = stock.price > ma5 ? 'Buy signal' : stock.price < ma5 ? 'Sell Signal' : 'Neutral';
-            let trend = calculateTrend(prices);
-            let volatility = calculateVolatility(prices);
-            let recommendationData = generateRecommendation(ma5signal, trend, volatility, stock.price, ma5);
-
-            document.getElementById('ma5').textContent = `KES ${ma5.toFixed(2)}`;
-            document.getElementById('ma5-trend').textContent = ma5signal;
-            document.getElementById('ma5-trend').className = `analysis-signal ${ma5signal === 'Buy signal' ? 'positive' : ma5signal === 'Sell Signal' ? 'negative' : 'neutral'}`;
-            document.getElementById('trend').textContent = trend.direction;
-            document.getElementById('trend-strength').textContent = `Strength: ${trend.strength.toFixed(1)}%`;
-            document.getElementById('trend-strength').className = `analysis-value ${trend.direction === 'Bullish' ? 'positive' : trend.direction === 'Bearish' ? 'negative' : 'neutral'}`;
-            document.getElementById('volatility').textContent = `${volatility.level.toFixed(1)}%`;
-            document.getElementById('volatility-level').textContent = volatility.description;
-            document.getElementById('volatility-level').className = `analysis-signal ${volatility.description === 'High' ? 'negative' : volatility.description === 'Low' ? 'positive' : 'neutral'}`;
-            document.getElementById('recommendation').textContent = recommendationData.recommendation;
-            document.getElementById('confidence').textContent = `Confidence: ${recommendationData.confidence}`;
-            document.getElementById('recommendation').className = `analysis-value ${recommendationData.recommendation.includes('BUY') ? 'positive' : recommendationData.recommendation.includes('Sell') ? 'negative' : 'neutral'}`;
-        }
-
-        window.onload = function() {
-            initializeChartData();
-            updateChart();
-            updateAnalysis();
-        };
-        let currentTradeType='buy';
-        let userBalance = 50000;
-        let tradeHistory =[];
-        function showpage(pageid){
-            document.getelementarybyid('dashboard-page').style.display ='none';
-            document.getelementarybyid('trading-page').style.display='none';
-            document.getelementarybyid(pageid+'-page').style.display='block';
-            document.querySelectorAll('.nav-link').foreach(link =>{
-                link.classlist.remove('active');
-            });
-            document.getelementarybyid('nav-'+pageid).classlist.add('active');
-
-        }
-        function selectTradeStock(){
-            let selectedsymbol=document.getElementById('trade-stock').value;
-
-            if(!selectedsymbol){
-                document.getElementById('selected-stock-info').style.display='none';
-                document.getElementById('execute-btn').disabled=true;
-                return;
-            }
-            let stock=stock.finds(s=>s.symbol===selectedsymbol);
-
-            document.getElementById('stock-name').text.content=`${stock.symbol}-${stock.name}`;
-            document.getElementById('current-price').text.content=`KES ${stock.price.tofixed(2)}`;
-
-            let changetext=stock.change >= 0 ? `+${stock.change.tofixed(2)}`:stock.change.tofixed(2);
-            let changepercent=stock.change >= 0 ? `+${stock.changepercent.tofixed(2)}` : stock.changepercent.tofixed(2);
-            document.getElementById('price-change').text.content = `${changeText} (${changepercent}%)`;
-            document.getElementById('selected-stock-info').style.display='block';
-
-            calculatetotal();
-        }
-        function settradetype(type){
-            currentTradeType=type;
-            document.querySelectorAll('.trade-tab').foreach(tab=> {
-                tab.classlist.remove('activate','sell');
-            });
-            let activetab=document.querySelector(`[onclick="settradetype('${type}')"]`);
-            activetab.classlist.add('active');
-
-            if (type=== 'sell'){
-                activetab.classlist.add('sell');
-                document.getElementById('execute-btn').textcontent = 'place sell order';
-                document.getElementById('execute-btn').classname = 'execute-btn sell';
-
-            }
-            else{
-                document.getElementById('execute-btn').textcontent = 'place buy order';
-                document.getElementById('execute-btn').classname = 'execute-btn';
-
-            }
-            calculatetotal();
-        }
-        function calculatetotal(){
-            let shares = parseint(document.getElementById('shares').value)|| 0;
-            let price = parsefloat(document.getElementById('share-price').value)|| 0;
-            let total = shares * price;
-
-            document.getElementById('total-cost').textcontent = `KES ${total.tofixed(2)}`;
-            document.getElementById('balance').textContent = `KES ${userBalance.tofixed(2)}`;
-
-            let canexecute = false;
-
-            if (shares > 0 && price > 0){
-                if(currentTradeType === 'buy'){
-                    canexecute = total <= userBalance;
-                }
-                else{
-                    let selectedsymbol = document.getElementById('trade-stock').value;
-                    let holding = portfolio.find(p => p.symbol === selectedSymbol);
-                    canexecute = holding && holding.shares >= shares;
-
-                }
-            }
-            document.getElementById('execute-btn').disabled = !canexecute;
-        }
-
-        function executetrade() {
-            let selectedsymbol = document.getElementById('trade-stock').value;
-            let shares = parseint(document.getElementById('shares').value);
-            let price = parsefloat(document.getElementById('share-price').value);
-            let total = shares * price;
-            let stock = stocks.find(s => s.symbol === selectedsymbol);
-            if (currenttradetype === 'buy'){
-                userBalance -= total;
-
-                let existingHolding = portfolio.find(p => p.symbol === selectedsymbol);
-                if (existingHolding){
-                    let totalshares = existingholding.shares + shares;
-                    let totalcost = (existingholding.shares * existingholding.buyprice) + total;
-                    existingholding.share = totalshares;
-                    existingholding.buyprice = totalcost / totalshares;
-                }
-                else{
-                    porfolio.push({
-                        symbol: selectedsymbol,
-                        shares:shares,
-                        buyprice: price
-                    });
-                }
-                alert(`successfully bought ${shares} shares of ${selectedsymbol} for KES ${total.tofixed(2)}!`);  
-            }
-            else{
-                userBalance += total;
-                let holding = portfolio.find(p => p.symbol === selectedsymbol);
-                holding.shares -=shares;
-                if (holding.shares === 0){
-                    portfolio = portfolio.filter(p => p.symbol !== selectedsymbol);
-                }
-                alert(`successfully sold ${shares} shares of ${selectedsymbol} for KES ${total.tofixed(2)}!`);
-
-            }
-            tradeHistory.unshift({
-                type: currentTradeType,
-                symbol:currentsymbol,
-                name:stock.name,
-                shares: shares,
-                price:price,
-                total:total,
-                timestamp: new Date()
-            });
-            updatetradehistory();
-            updateportfoliodisplay();
-            calculatetotal();
-
-            document.getElementById('shares').value = '';
-            document.getElementById('total-cost').textcontent = 'KES 0.00';
-            
-        }
         
-        function updatetradehistory(){
-            let tradeslist = document.getelementarybyid('trades-list');
-
-            if (tradehistory.length === 0){
-                tradelist.innerHTML = '<p>No tradesyet. start trading to see your transaction history!</p>';
-                return;
-            }
-            tradelist.innerHTML = '';
-
-            tradehistory.slice(0,10).foreach(trade => {
-                let tradediv = document.createelement('div');
-                tradediv.classname = 'trade-item ${trade.type}';
-
-                tradediv.innerHTML = `
-                <div>
-                    <strong>${trade.type.touppercase()}</strong> ${trade.shares}shares of ${trade.symbol}
-                    <br><small>${trade.timestamp.tolocalestring()}</small>
+        <div class="main-content">
+            <!-- Morning Brief -->
+            <div class="morning-brief">
+                <h2>📈 Morning Brief</h2>
+                <div class="brief-date">Wednesday, 24 September 2025</div>
+                
+                <div class="brief-item">
+                    <h3>📈 NSE up 1.2% as banking sector rallies</h3>
+                    <p>Equity Bank leads gains on strong Q3 earnings beat. KES steady at 129.5 vs USD</p>
                 </div>
-                <div style="text-align: right;">
-                    <div>KES ${trade.price.tofixed(2)} per share</div>
-                    <div><strong>total: KES ${trade.total.tofixed(2)}</strong></div>
+                
+                <div class="key-focus">
+                    <div class="key-focus-label">Key Focus:</div>
+                    <div>EABL earnings call at 2:00 PM EAT, inflation data due Thursday</div>
                 </div>
-            `;
-
-            trade.list.appendchild(tradediv);
-            });
-        }
-
-        // Fix showPage navigation and related trading logic
-        function showPage(pageId) {
-            document.getElementById('dashboard-page').style.display = 'none';
-            document.getElementById('trading-page').style.display = 'none';
-            if (pageId === 'dashboard') {
-                document.getElementById('dashboard-page').style.display = 'block';
-            } else if (pageId === 'trading') {
-                document.getElementById('trading-page').style.display = 'block';
-            }
-        }
-    </script>
+            </div>
+            
+            <!-- NSE Fund Tracking -->
+            <div class="fund-tracking">
+                <h2>NSE Fund Tracking</h2>
+                <div class="indices-grid">
+                    <div class="index-card">
+                        <div class="index-name">NSE 20 Index</div>
+                        <div class="index-value">1,847.23</div>
+                        <div class="index-change positive">↗ +1.2%</div>
+                    </div>
+                    <div class="index-card">
+                        <div class="index-name">NSE 25 Index</div>
+                        <div class="index-value">3,542.87</div>
+                        <div class="index-change positive">↗ +0.8%</div>
+                    </div>
+                    <div class="index-card">
+                        <div class="index-name">All Share Index</div>
+                        <div class="index-value">112.45</div>
+                        <div class="index-change negative">📉 -0.3%</div>
+                    </div>
+                    <div class="index-card">
+                        <div class="index-name">FTSE NSE Kenya 15</div>
+                        <div class="index-value">1,234.56</div>
+                        <div class="index-change positive">↗ +2.1%</div>
+                    </div>
+                    <div class="index-card">
+                        <div class="index-name">NSE Growth Index</div>
+                        <div class="index-value">987.32</div>
+                        <div class="index-change negative">📉 -1.5%</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Sections -->
+            <div class="sections-grid">
+                <!-- Top Movers -->
+                <div class="section">
+                    <h3><span class="section-icon">📈</span> Top Movers</h3>
+                    
+                    <div class="stock-item">
+                        <div class="stock-info">
+                            <h4>EQTY</h4>
+                            <p>Equity Group</p>
+                        </div>
+                        <div class="stock-price">
+                            <div class="price">KES 62.50</div>
+                            <div class="change positive">↗ +8.2%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stock-item">
+                        <div class="stock-info">
+                            <h4>SCBK</h4>
+                            <p>Standard Chartered</p>
+                        </div>
+                        <div class="stock-price">
+                            <div class="price">KES 185.00</div>
+                            <div class="change positive">↗ +5.7%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stock-item">
+                        <div class="stock-info">
+                            <h4>SAFCOM</h4>
+                            <p>Safaricom</p>
+                        </div>
+                        <div class="stock-price">
+                            <div class="price">KES 12.85</div>
+                            <div class="change positive">↗ +4.1%</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- My Watchlist -->
+                <div class="section">
+                    <h3><span class="section-icon">💚</span> My Watchlist</h3>
+                    
+                    <div class="watchlist-summary">
+                        <div class="watchlist-card">
+                            <h4>📈 Today</h4>
+                            <div class="value">+ KES 2,450</div>
+                            <div class="change">+3.2%</div>
+                        </div>
+                        <div class="watchlist-card">
+                            <h4>📊 Total</h4>
+                            <div class="value">+ KES 18,320</div>
+                            <div class="change">+12.7%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stock-item">
+                        <div class="stock-info">
+                            <h4>SAFCOM</h4>
+                        </div>
+                        <div class="stock-price">
+                            <div class="price">KES 12.85</div>
+                            <div class="change positive">+1.18%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stock-item">
+                        <div class="stock-info">
+                            <h4>EQTY</h4>
+                        </div>
+                        <div class="stock-price">
+                            <div class="price">KES 62.50</div>
+                            <div class="change positive">+13.12%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-links">
+                <a href="index.html" class="nav-link active">
+                    <div class="nav-icon">🏠</div>
+                    <div>Home</div>
+                </a>
+                <a href="markets.html" class="nav-link">
+                    <div class="nav-icon">📈</div>
+                    <div>Markets</div>
+                </a>
+                <a href="news.html" class="nav-link">
+                    <div class="nav-icon">📰</div>
+                    <div>News</div>
+                </a>
+                <a href="discover.html" class="nav-link">
+                    <div class="nav-icon">🔍</div>
+                    <div>Discover</div>
+                </a>
+                <a href="portfolio.html" class="nav-link">
+                    <div class="nav-icon">⏱</div>
+                    <div>Portfolio</div>
+                </a>
+                <a href="account.html" class="nav-link">
+                    <div class="nav-icon">👤</div>
+                    <div>Account</div>
+                </a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
