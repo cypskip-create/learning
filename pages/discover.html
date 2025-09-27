@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Discover - AfriFinance</title>
+        <style>
+            * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a1a;
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 100%;
+            min-height: 100vh;
+            background: #1a1a1a;
+        }
+        
+        /* Header */
+        .header {
+            background: #1a1a1a;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+        }
+        
+        .header h1 {
+            color: #00ff88;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        .header p {
+            color: #888;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+        
+        .header-right {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 20px;
+            padding-bottom: 100px;
+        }
+        
+        /* Portfolio Insights */
+        .portfolio-insights {
+            background: #2a2a2a;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+            border-left: 4px solid #00ff88;
+            position: relative;
+        }
+        
+        .insights-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .insights-title {
+            color: #00ff88;
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .performance-badge {
+            background: #00ff88;
+            color: #1a1a1a;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 14px;
+            font-weight: 600;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        
+        .top-holdings {
+            margin-bottom: 12px;
+        }
+        
+        .holdings-label {
+            color: #aaa;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        
+        .holdings-list {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .holding-tag {
+            background: #1a3a1a;
+            border: 1px solid #00ff88;
+            color: #00ff88;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .best-performer {
+            margin-top: 12px;
+        }
+        
+        .best-label {
+            color: #aaa;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        
+        .best-value {
+            color: #00ff88;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .time-icon {
+            position: absolute;
+            top: 20px;
+            right: 60px;
+            background: #00ff88;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1a1a1a;
+            font-size: 16px;
+        }
+        
+        /* Feature Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        
+        .feature-card {
+            background: #2a2a2a;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            position: relative;
+        }
+        
+        .feature-card:hover {
+            background: #333;
+        }
+        
+        .feature-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .feature-icon {
+            width: 32px;
+            height: 32px;
+            background: #00ff88;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+        
+        .feature-icon.orange {
+            background: #ff6b35;
+        }
+        
+        .feature-icon.green {
+            background: #00ff88;
+        }
+        
+        .feature-title {
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .feature-description {
+            color: #aaa;
+            font-size: 14px;
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+        
+        .feature-stats {
+            color: #ff6b35;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .feature-stats.green {
+            color: #00ff88;
+        }
+        
+        /* Bottom Tabs */
+        .bottom-tabs {
+            display: flex;
+            background: #2a2a2a;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+        
+        .bottom-tab {
+            flex: 1;
+            padding: 16px;
+            text-align: center;
+            background: transparent;
+            border: none;
+            color: #888;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .bottom-tab.active {
+            background: #1a1a1a;
+            color: #fff;
+        }
+        
+        /* Feed Section */
+        .feed-section {
+            margin-top: 24px;
+        }
+        
+        .feed-filters {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .feed-filter {
+            padding: 8px 16px;
+            background: transparent;
+            border: 1px solid #333;
+            border-radius: 20px;
+            color: #888;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .feed-filter.active {
+            background: #1a1a1a;
+            color: #fff;
+            border-color: #fff;
+        }
+        
+        /* Feed Posts */
+        .feed-post {
+            background: #2a2a2a;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+        
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .post-avatar {
+            width: 36px;
+            height: 36px;
+            background: #00ff88;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1a1a1a;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .post-avatar.blue {
+            background: #007acc;
+        }
+        
+        .post-info {
+            flex: 1;
+        }
+        
+        .post-author {
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+        
+        .post-time {
+            color: #888;
+            font-size: 12px;
+        }
+        
+        .post-content {
+            color: #ccc;
+            font-size: 14px;
+            line-height: 1.4;
+            margin-bottom: 12px;
+        }
+        
+        .post-actions {
+            display: flex;
+            gap: 16px;
+        }
+        
+        .post-action {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: #888;
+            font-size: 12px;
+        }
+        
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #1a1a1a;
+            border-top: 1px solid #333;
+            padding: 12px 0;
+        }
+        
+        .nav-links {
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+        }
+        
+        .nav-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #888;
+            font-size: 12px;
+            transition: color 0.3s;
+        }
+        
+        .nav-link.active {
+            color: #00ff88;
+        }
+        
+        .nav-link:hover {
+            color: #00ff88;
+        }
+        
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 4px;
+            font-size: 20px;
+        }
+        .post-btn {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            background: #00ff88;
+            border: none;
+            border-radius: 50%;
+            color: #1a1a1a;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
+            z-index: 10;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .main-content {
+                padding: 16px;
+            }
+            
+            .feature-card {
+                padding: 16px;
+            }
+        }
+         @media (max-width: 768px){
+            .bottom-nav{
+                padding: 0;
+            }
+            .nav-links{
+                flex-direction: row;
+                justify-content: space-between;
+                gap: 0;
+            }
+            .nav-link{
+                flex: 1 1 0;
+                padding: 8px 0;
+                font-size: 11px;
+            }
+            .nav-icon{
+                width: 20px;
+                height: 20px;
+                margin-bottom: 2px;
+                font-size: 18px;
+            }
+        }
+        @media(max-width: 480px){
+            .nav-links{
+                flex-direction: row;
+                justify-content: space-between;
+                gap: 0;
+            }
+            .nav-link{
+                font-size: 10px;
+                padding: 16px 0;
+            }
+            .nav-icon{
+                font-size: 16px;
+            }
+        }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <div>
+                    <h1>🔍 Discover</h1>
+                    <p>Social investing & learning hub</p>
+                </div>
+                <div class="header-right">
+                    <div>🔍</div>
+                    <div>🔔</div>
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="portfolio-insights">
+                    <div class="insights-header">
+                        <h2 class="insights-title">🏆 portfolio insights</h2>
+                    </div>
+                    <div class="performance-badge">+24.5%</div>
+                    
+
+                    <div class="top-holdings">
+                        <div class="holdings-label">Top Holdings</div>
+                        <div class="holdings-list">
+                            <span class="holding-tag">SAFCOM</span>
+                            <span class="holding-tag">EQTY</span>
+                            <span class="holding-tag">KCB</span>
+                        </div>
+                    </div>
+
+                    <div class="best-performer">
+                        <div class="best-label">Best:EQTY +13.2%</div>
+                    </div>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-header">
+                            <div class="feature-icon green">👥</div>
+                            <div class="feature-title">TradersHub</div>
+                        </div>
+                        <div class="feature-description">social trading community</div>
+                        <div class="feature-stats green">🔴 24 new posts</div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-header">
+                            <div class="feature-icon orange">📚</div>
+                            <div class="feature-title">Learn</div>
+                        </div>
+                        <div class="feature-description">Investment courses & guides</div>
+                        <div class="feature-stats">▶ 12 courses available</div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-header">
+                            <div class="feature-icon green">📈</div>
+                            <div class="feature-title">Papertrading</div>
+                        </div>
+                        <div class="feature-description">Practice trading risk-free</div>
+                        <div class="feature-stats">👥 2847 active</div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-header">
+                            <div class="feature-icon orange">#</div>
+                            <div class="feature-title">Chats</div>
+                        </div>
+                        <div class="feature-description">Real-time trading rooms</div>
+                        <div class="feature-stats green">💬 3 active rooms</div>
+                    </div>
+                </div>
+
+                <div class="feed-section">
+                    <div class="feed-filters">
+                        <button class="feed-filter active">latest</button>
+                        <button class="feed-filter">Top</button>
+                        <button class="feed-filter">Following</button>
+                    </div>
+
+                    <div class="feed-post">
+                        <div class="post-header">
+                            <div class="post-avatar">TK</div>
+                            <div class="post-info">
+                                <div class="post-author">TraderKE_Pro</div>
+                                <div class="post-time">2h ago</div>
+                            </div>
+                        </div>
+                        <div class="post-actions">
+                            <div class="post-action">👍 24</div>
+                            <div class="post-action">💬 8</div>
+                        </div>
+                    </div>
+
+                    <div class="feed-post">
+                        <div class="post-header">
+                            <div class="post-avatar blue">IJ</div>
+                            <div class="post-info">
+                                <div class="post-author">InvestorJane</div>
+                                <div class="post-time">4h ago</div>
+                            </div>
+                        </div>
+                        <div class="post-content">
+                            Banking sector showing strong fundamentals. KCB and EQTY are mt picks for Q4 💪
+                        </div>
+                        <div class="post-action">
+                            <div class="post-action">👍 18</div>
+                            <div class="post-action">💬 12</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="post-btn">✏️</button>
+
+            <div class="bottom-nav">
+                <div class="nav-link"style="flex-direction: row;align-items: stretch; gap: 130px";>
+                    <a href="homepage.html" class="nav-link">
+                        <div class="nav-icon">🏠</div>
+                        <div>Home</div>
+                    </a>
+                    <a href="markets.html" class="nav-link">
+                        <div class="nav-icon">📈</div>
+                        <div>markets</div>
+                    </a>
+                    <a href="news.html" class="nav-link active">
+                        <div class="nav-icon">📰</div>
+                        <div>News</div>
+                    </a>
+                    <a href="discover.html" class="nav-link">
+                        <div class="nav-icon">🔍</div>
+                        <div>Discover</div>
+                    </a>
+                    <a href="portfolio.html" class="nav-link">
+                        <div class="nav-icon">⏱</div>
+                        <div>Portfolio</div>
+                    </a>
+                    <a href="profile.html" class="nav-link">
+                        <div class="nav-icon">👤</div>
+                        <div>Account</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

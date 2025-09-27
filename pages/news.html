@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Market New - AfriFinance</title>
+        <style>
+            *{
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            body{
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,  sans-serif;
+                background: #1a1a1a;
+                color: #ffffff;
+                min-height: 100vh;
+                padding: 0;
+            }
+            .container{
+                max-width: 100%;
+                min-height: 100vh;
+                background: 1a1a1a;
+            }
+            .header {
+                background: #1a1a1a;
+                padding: 20px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-bottom: 1px solid #333;
+            }
+        
+            .header h1 {
+                color: #00ff88;
+                font-size: 24px;
+                font-weight: 600;
+            }
+        
+            .header p {
+                color: #888;
+                font-size: 14px;
+                margin-top: 4px;
+            }
+        
+            .header-right {
+                display: flex;
+                gap: 15px;
+                align-items: center;
+            }
+            .main-content {
+                padding: 20px;
+                padding-bottom: 100px;
+            }
+            .news-tabs {
+                display: flex;
+                gap: 0;
+                margin-bottom: 24px;
+                background: #2a2a2a;
+                border-radius: 12px;
+                overflow: hidden;
+                padding: 4px;
+            }
+        
+            .news-tab {
+                flex: 1;
+                padding: 12px 16px;
+                text-align: center;
+                background: transparent;
+                border: none;
+                color: #888;
+                font-size: 14px;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.3s;
+                border-radius: 8px;
+            }
+        
+            .news-tab.active {
+                background: #1a1a1a;
+                color: #fff;
+            }
+            .news-list {
+                display: flex;
+                flex-direction: column;
+                gap: 0;
+            }
+        
+            .news-item {
+                background: #2a2a2a;
+                border-radius: 12px;
+                padding: 20px;
+                margin-bottom: 16px;
+                display: flex;
+                gap: 16px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+        
+            .news-item:hover {
+                background: #333;
+            }
+        
+            .news-icon {
+                width: 40px;
+                height: 40px;
+                background: #00ff88;
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 16px;
+                flex-shrink: 0;
+            }
+        
+            .news-icon.safaricom {
+                background: #00ff88;
+            }
+        
+            .news-icon.nse {
+                background: #007acc;
+            }
+        
+            .news-icon.bank {
+                background: #666;
+            }
+        
+            .news-icon.equity {
+                background: #ff6b35;
+            }
+        
+            .news-content {
+                flex: 1;
+            }
+        
+            .news-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                margin-bottom: 8px;
+            }
+        
+            .news-title {
+                color: #fff;
+                font-size: 16px;
+                font-weight: 600;
+                line-height: 1.3;
+                flex: 1;
+                margin-right: 12px;
+            }
+        
+            .news-time {
+                color: #888;
+                font-size: 12px;
+                white-space: nowrap;
+            }
+        
+            .news-description {
+                color: #aaa;
+                font-size: 14px;
+                line-height: 1.4;
+                margin-bottom: 8px;
+            }
+        
+            .news-source {
+                color: #888;
+                font-size: 12px;
+            }
+        
+            .breaking-news {
+                background: linear-gradient(90deg, #ff6b35, #f7931e);
+                border-radius: 12px;
+                padding: 16px 20px;
+                margin-bottom: 24px;
+                position: relative;
+                overflow: hidden;
+            }
+        
+            .breaking-news::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+                animation: shine 2s infinite;
+            }
+        
+            @keyframes shine {
+                0% { left: -100%; }
+                100% { left: 100%; }
+            }
+        
+            .breaking-label {
+                color: #fff;
+                font-size: 12px;
+                font-weight: 700;
+                text-transform: uppercase;
+                margin-bottom: 4px;
+                display: flex;
+                align-items: center;
+                gap: 4px;
+            }
+        
+            .breaking-text {
+                color: #fff;
+                font-size: 14px;
+                font-weight: 500;
+                line-height: 1.3;
+            }
+            .bottom-nav {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: #1a1a1a;
+                border-top: 1px solid #333;
+                padding: 12px 0;
+            }
+        
+            .nav-links {
+                display: flex;
+                justify-content: space-evenly;
+                align-items: center;
+            }
+        
+            .nav-link {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-decoration: none;
+                color: #888;
+                font-size: 12px;
+                transition: color 0.3s;
+            }
+        
+            .nav-link.active {
+                color: #00ff88;
+            }
+        
+            .nav-link:hover {
+                color: #00ff88;
+            }
+        
+            .nav-icon {
+                width: 24px;
+                height: 24px;
+                margin-bottom: 4px;
+                font-size: 20px;
+            }
+        
+            @media (max-width: 768px) {
+                .news-tabs {
+                    flex-wrap: wrap;
+                }
+            
+                .news-tab {
+                    font-size: 12px;
+                    padding: 10px 12px;
+                }
+            
+                .main-content {
+                    padding: 16px;
+                }
+            
+                .news-item {
+                    padding: 16px;
+                }
+            
+                .news-title {
+                    font-size: 15px;
+                }
+            }
+            .news-filter-tabs {
+                display: flex;
+                gap: 8px;
+                margin-bottom: 20px;
+                padding: 0 4px;
+            }
+
+            .filter-btn {
+                flex: 1;
+                padding: 10px 16px;
+                background: #333;
+                border: 1px solid #444;
+                color: #aaa;
+                font-size: 14px;
+                font-weight: 500;
+                border-radius: 20px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                text-align: center;
+                min-height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .filter-btn:hover {
+                background: #404040;
+                border-color: #555;
+                color: #ccc;
+            }
+
+            .filter-btn.active {
+                background: #00ff88;
+                border-color: #00ff88;
+                color: #1a1a1a;
+                font-weight: 600;
+            }
+
+            .filter-btn.active:hover {
+                background: #00e67a;
+                border-color: #00e67a;
+            }
+
+
+            .filter-btn.active-subtle {
+                background: #2a4a2a;
+                border-color: #00ff88;
+                color: #00ff88;
+            }
+
+
+            @media (max-width: 768px) {
+                .filter-btn {
+                    font-size: 13px;
+                    padding: 8px 12px;
+                    min-height: 36px;
+                }
+            }
+             @media (max-width: 768px){
+            .bottom-nav{
+                padding: 0;
+            }
+            .nav-links{
+                flex-direction: row;
+                justify-content: space-between;
+                gap: 0;
+            }
+            .nav-link{
+                flex: 1 1 0;
+                padding: 8px 0;
+                font-size: 11px;
+            }
+            .nav-icon{
+                width: 20px;
+                height: 20px;
+                margin-bottom: 2px;
+                font-size: 18px;
+            }
+        }
+        @media(max-width: 480px){
+            .nav-links{
+                flex-direction: row;
+                justify-content: space-between;
+                gap: 0;
+            }
+            .nav-link{
+                font-size: 10px;
+                padding: 16px 0;
+            }
+            .nav-icon{
+                font-size: 16px;
+            }
+        }
+            
+            
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <div>
+                    <h1>📰 Market News</h1>
+                    <p>Stay updated with latest market developments</p>
+                </div>
+                <div class="header-right">
+                    <div>📁</div>
+                    <div>🔍</div>
+                </div>
+            </div>
+
+            <div class="news-filter-tabs">
+                <button class="filter-btn active">Headlines</button>
+                <button class="filter-btn">Latest</button>
+                <button class="filter-btn">Watchlist</button>
+                <button class="filter-btn">Earnings</button>
+            </div>
+            <div class="main-content">
+                <div class="news-item">
+                    <div class="breaking-news">
+                    <div class="breaking-label">🔴 Breaking News</div>
+                    <div class="breaking-text">KCB Group annoumces strategic partnership with fintech startup to enhance digital banking services</div>
+                </div>
+                    <div class="news-icon safaricom">📱</div>
+                    <div class="news-content">
+                        <div class="news-header">
+                            <h3 class="news-title">Safaricom Reports Strong Q3 Results</h3>
+                            <span class="news-time">2 hours ago</span>
+                        </div>
+                        <p class="news-description">Kenya's largets telco posts 12% growth in revenue driven by M-pesa expansion</p>
+                        <p class="news-source">Business Daily</p>
+                    </div>
+                </div>
+
+                <div class="news-item">
+                    <div class="news-icon nse">📊</div>
+                    <div class="news-content">
+                        <div class="news-header">
+                            <h3 class="news-title">NSE 20 Index Hits New Monthly High</h3>
+                            <span class="news-time">4 hours ago</span>
+                        </div>
+                        <p class="news-description">Banking and telecom sectors lead market rally amid positive investor sentiment</p>
+                        <p class="news-source">Capital FM</p>
+                    </div>
+                </div>
+
+                <div class="news-item">
+                    <div class="news-icon bank">🏛</div>
+                    <div class="news-content">
+                        <div class="news-header">
+                            <h3 class="news-title">Central Bank Maintains Rates at 12.5%</h3>
+                            <span class="news-time">6 hours ago</span>
+                        </div>
+                        <p class="news-description">CBK keeps policy rate unchanged citing stable inflation outlook</p>
+                        <p class="news-source">The Star</p>
+                    </div>
+                </div>
+
+                <div class="news-item">
+                    <div class="news-icon equity">🏦</div>
+                    <div class="news-content">
+                        <div class="news-header">
+                            <h3 class="news-title">EquityBank Expands to South Sudan</h3>
+                            <span class="news-time">8 hours ago</span>
+                        </div>
+                        <p class="news-description">Regional banking group opens new subsidiary as part of expansion strategy</p>
+                        <p class="news-source">Standard</p>
+                    </div>
+                </div>
+                <div class="news-item">
+                    <div class="news-icon bank">🏦</div>
+                    <div class="news-content">
+                        <div class="news-header">
+                            <h3 class="news-title">KCB Group Posts Record Profits</h3>
+                            <span class="news-time">12 hours ago</span>
+                        </div>
+                        <p class="news-description">Leading bank reports 18% increase in net profit driven by loan growth</p>
+                        <p class="news-source">Business Daily</p>
+                    </div>
+                </div>
+                <div class="news-item">
+                    <div class="news-icon">🍺</div>
+                    <div class="news-content">
+                        <div class="news-header">
+                            <h3 class="news-title">EABL Announces Dividend Payment</h3>
+                            <span class="news-time">1 day ago</span>
+                        </div>
+                        <p class="news-description">East African Breweries declares interim dividend of KES 4.50 per share</p>
+                        <p class="news-source">Capital FM</p>
+                    </div>
+                </div>
+            </div>
+
+            
+        </div>
+        <div class="bottom-nav">
+            <div class="nav-link"style="flex-direction: row;align-items: stretch; gap: 130px";>
+                <a href="homepage.html" class="nav-link">
+                    <div class="nav-icon">🏠</div>
+                    <div>Home</div>
+                </a>
+                <a href="markets.html" class="nav-link">
+                    <div class="nav-icon">📈</div>
+                    <div>markets</div>
+                </a>
+                <a href="news.html" class="nav-link active">
+                    <div class="nav-icon">📰</div>
+                    <div>News</div>
+                </a>
+                <a href="discover.html" class="nav-link">
+                    <div class="nav-icon">🔍</div>
+                    <div>Discover</div>
+                </a>
+                <a href="portfolio.html" class="nav-link">
+                    <div class="nav-icon">⏱</div>
+                    <div>Portfolio</div>
+                </a>
+                <a href="profile.html" class="nav-link">
+                    <div class="nav-icon">👤</div>
+                    <div>Account</div>
+                </a>
+            </div>
+        </div>
+    </body>
+</html>

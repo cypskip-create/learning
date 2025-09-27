@@ -206,6 +206,31 @@
             font-size: 14px;
             font-weight: 500;
         }
+        .bottom-tabs {
+            display: flex;
+            background: #2a2a2a;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+        
+        .bottom-tab {
+            flex: 1;
+            padding: 16px;
+            text-align: center;
+            background: transparent;
+            border: none;
+            color: #888;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .bottom-tab.active {
+            background: #1a1a1a;
+            color: #fff;
+        }
         .bottom-nav{
             position: fixed;
             bottom: 0;
@@ -215,7 +240,7 @@
             border-top: 1px solid #333;
             padding: 12px 0;
         }
-        .nav-links{
+        .nav-link{
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -223,6 +248,12 @@
             color: #888;
             font-size: 12px;
             transition: color 0.3s;
+
+        }
+        .nav-links{
+            display: flex;
+            justify-content: space-around;
+            align-items: center;      
         }
         .nav-link.active{
             color: #00ff88;
@@ -234,6 +265,7 @@
             width: 24px;
             height: 24px;
             margin-bottom: 4px;
+            font-size: 20px;
         }
         @media (max-width: 768px){
             .stock-container{
@@ -246,6 +278,41 @@
             }
             .header h1{
                 font-size: 20px;
+            }
+        }
+         @media (max-width: 768px){
+            .bottom-nav{
+                padding: 0;
+            }
+            .nav-links{
+                flex-direction: row;
+                justify-content: space-between;
+                gap: 0;
+            }
+            .nav-link{
+                flex: 1 1 0;
+                padding: 8px 0;
+                font-size: 11px;
+            }
+            .nav-icon{
+                width: 20px;
+                height: 20px;
+                margin-bottom: 2px;
+                font-size: 18px;
+            }
+        }
+        @media(max-width: 480px){
+            .nav-links{
+                flex-direction: row;
+                justify-content: space-between;
+                gap: 0;
+            }
+            .nav-link{
+                font-size: 10px;
+                padding: 16px 0;
+            }
+            .nav-icon{
+                font-size: 16px;
             }
         }
     </style>
@@ -421,7 +488,7 @@
                     <div class="nav-icon">⏱</div>
                     <div>Portfolio</div>
                 </a>
-                <a href="account.html" class="nav-link">
+                <a href="profile.html" class="nav-link">
                     <div class="nav-icon">👤</div>
                     <div>Account</div>
                 </a>
