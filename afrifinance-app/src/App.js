@@ -8,13 +8,14 @@ import News from './components/News';
 import Discover from'./components/Discover';
 import Portfolio from './components/Portfolio';
 import Profile from './components/Profile';
+import BottomNavigation from './components/BottomNavigation';
 
 function App(){
   return(
     <Router>
-      <div classname="app">
-        <div classname="container">
-          <main classname="main-content">
+      <div className="app">
+        <div className="container">
+          <main className="main-content">
             <Routes>
               <Route path="/"element={<Home />} />
               <Route path="/markets" element={<Market />} />
@@ -24,6 +25,7 @@ function App(){
               <Route path="/Profile" element={<Profile />} />
             </Routes>          
           </main>
+          <BottomNavigation />
         </div>
       </div>
     </Router>

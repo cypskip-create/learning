@@ -1,0 +1,300 @@
+        .home{
+            background: #1a1a1a;
+            min-height: 100vh;
+            color: #fff;
+            padding-bottom: 100px; 
+        }
+        .header {
+            background: #1a1a1a;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+        }
+        
+        .header h1 {
+            color: #00ff88;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        .header p {
+            color: #888;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+        
+        .header-right {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .notification-badge {
+            background: #00ff88;
+            color: #1a1a1a;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 20px;
+            padding-bottom: 100px;
+        }
+        
+        /* Morning Brief */
+        .morning-brief {
+            background: #2a2a2a;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+            border-left: 4px solid #00ff88;
+        }
+        
+        .morning-brief h2 {
+            color: #00ff88;
+            font-size: 18px;
+            margin-bottom: 16px;
+        }
+        
+        .brief-date {
+            color: #888;
+            font-size: 14px;
+            float: right;
+            margin-top: -35px;
+        }
+        
+        .brief-item {
+            margin-bottom: 12px;
+        }
+        
+        .brief-item h3 {
+            color: #fff;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+        
+        .brief-item p {
+            color: #aaa;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .key-focus {
+            background: #2d4a2d;
+            border: 1px solid #00ff88;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 12px;
+        }
+        
+        .key-focus-label {
+            color: #00ff88;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        /* NSE Fund Tracking */
+        .fund-tracking {
+            margin-bottom: 24px;
+        }
+        
+        .fund-tracking h2 {
+            color: #00ff88;
+            font-size: 18px;
+            margin-bottom: 16px;
+        }
+        
+        .indices-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+        }
+        
+        .index-card {
+            background: #2a2a2a;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+        
+        .index-name {
+            color: #aaa;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+        
+        .index-value {
+            color: #fff;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .index-change {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .positive {
+            color: #00ff88;
+        }
+        
+        .negative {
+            color: #ff6b6b;
+        }
+        
+        /* Sections Grid */
+        .sections-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .section {
+            background: #2a2a2a;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .section h3 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .section-icon {
+            color: #00ff88;
+        }
+        
+        .stock-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #333;
+        }
+        
+        .stock-item:last-child {
+            border-bottom: none;
+        }
+        
+        .stock-info h4 {
+            color: #fff;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+        
+        .stock-info p {
+            color: #aaa;
+            font-size: 14px;
+        }
+        
+        .stock-price {
+            text-align: right;
+        }
+        
+        .stock-price .price {
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .stock-price .change {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        /* Watchlist Summary */
+        .watchlist-summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .watchlist-card {
+            background: #1e3a1e;
+            border: 1px solid #00ff88;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+        
+        .watchlist-card h4 {
+            color: #00ff88;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+        
+        .watchlist-card .value {
+            color: #00ff88;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .watchlist-card .change {
+            color: #aaa;
+            font-size: 12px;
+        }
+        .bottom-tabs {
+            display: flex;
+            background: #2a2a2a;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+        
+        .bottom-tab {
+            flex: 1;
+            padding: 16px;
+            text-align: center;
+            background: transparent;
+            border: none;
+            color: #888;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .bottom-tab.active {
+            background: #1a1a1a;
+            color: #fff;
+        }
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .sections-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            
+            .indices-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .main-content {
+                padding: 16px;
+            }
+        }
+        
+        
+       
