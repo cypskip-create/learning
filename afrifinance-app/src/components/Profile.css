@@ -1,0 +1,323 @@
+.account {
+  background: #1a1a1a;
+  min-height: 100vh;
+  color: #fff;
+  padding-bottom: 100px;
+}
+
+/* Header */
+.header {
+  background: #1a1a1a;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #333;
+}
+
+.header h1 {
+  color: #00ff88;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.header p {
+  color: #888;
+  font-size: 14px;
+}
+
+.header-right {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.header-icon {
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Profile Section */
+.profile-section {
+  background: #2a2a2a;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px;
+  border-left: 4px solid #00ff88;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.profile-icon {
+  color: #00ff88;
+  font-size: 20px;
+}
+
+.profile-title {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.profile-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.profile-avatar {
+  width: 64px;
+  height: 64px;
+  background: #00ff88;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.profile-details h3 {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.profile-badge {
+  background: #00ff88;
+  color: #1a1a1a;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 4px;
+}
+
+.profile-member-since {
+  color: #888;
+  font-size: 14px;
+}
+
+.edit-profile-btn {
+  background: transparent;
+  border: 1px solid #00ff88;
+  color: #00ff88;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  width: 100%;
+}
+
+.edit-profile-btn:hover {
+  background: #00ff88;
+  color: #1a1a1a;
+}
+
+/* Subscription Plans */
+.subscription-section {
+  margin: 0 20px 24px 20px;
+}
+
+.subscription-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.subscription-icon {
+  color: #ffa500;
+  font-size: 20px;
+}
+
+.subscription-title {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.plan-card {
+  background: #2a2a2a;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.plan-card.current {
+  border: 2px solid #00ff88;
+}
+
+.plan-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.plan-name {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.plan-price {
+  color: #aaa;
+  font-size: 16px;
+}
+
+.current-badge {
+  background: #00ff88;
+  color: #1a1a1a;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  position: absolute;
+  top: -8px;
+  right: 20px;
+}
+
+.upgrade-btn {
+  background: #1a1a1a;
+  color: #fff;
+  border: 1px solid #666;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.upgrade-btn.primary {
+  background: #00ff88;
+  color: #1a1a1a;
+  border-color: #00ff88;
+}
+
+.upgrade-btn.primary:hover {
+  background: #00e67a;
+}
+
+.plan-features {
+  list-style: none;
+  margin-top: 16px;
+}
+
+.plan-features li {
+  color: #aaa;
+  font-size: 14px;
+  margin-bottom: 8px;
+  padding-left: 20px;
+  position: relative;
+}
+
+.plan-features li::before {
+  content: '•';
+  color: #00ff88;
+  position: absolute;
+  left: 0;
+}
+
+/* Settings Section */
+.settings-section {
+  background: #2a2a2a;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 0 20px 24px 20px;
+}
+
+.settings-title {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.settings-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid #333;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.settings-option:hover {
+  background: rgba(255, 255, 255, 0.05);
+  margin: 0 -20px;
+  padding: 16px 20px;
+}
+
+.settings-option:last-child {
+  border-bottom: none;
+}
+
+.settings-option h4 {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.settings-option p {
+  color: #888;
+  font-size: 14px;
+}
+
+.settings-arrow {
+  color: #666;
+  font-size: 24px;
+}
+
+/* Logout Button */
+.logout-section {
+  text-align: center;
+  margin: 20px;
+}
+
+.logout-btn {
+  background: transparent;
+  border: 1px solid #ff6b6b;
+  color: #ff6b6b;
+  padding: 12px 32px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.logout-btn:hover {
+  background: #ff6b6b;
+  color: #fff;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .profile-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .profile-avatar {
+    width: 56px;
+    height: 56px;
+    font-size: 20px;
+  }
+}

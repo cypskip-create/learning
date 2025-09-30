@@ -115,8 +115,6 @@ const News = () => {
           </div>
         ))}
       </div>
-
-      
     </div>
   );
 };
