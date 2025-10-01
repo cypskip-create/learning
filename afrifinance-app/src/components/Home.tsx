@@ -11,7 +11,7 @@ const Home = () =>{
 
         return () => clearInterval(timer);
     }, []);
-    const formatDate = (date) => {
+    const formatDate = (date: Date) => {
         return date.toLocaleDateString('en-US', {
             weekday: 'long',
             year: 'numeric',

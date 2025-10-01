@@ -15,7 +15,7 @@ const BottomNavigation = () => {
     { path: '/profile', icon: '👤', label: 'Profile' }
   ];
 
-  const handleNavigation = (path) => {
+  const handleNavigation = (path: string) => {
     navigate(path);
   };
 
