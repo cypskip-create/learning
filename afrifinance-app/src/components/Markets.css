@@ -244,3 +244,10 @@
     min-width: 80px;
   }
 }
+.stock-item.clickable {
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.stock-item.clickable:hover {
+  background: rgba(0, 255, 136, 0.1);
+}

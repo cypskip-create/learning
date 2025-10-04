@@ -9,6 +9,7 @@ import News from './components/News';
 import Discover from './components/Discover';
 import Portfolio from './components/Portfolio';
 import Profile from './components/Profile';
+import StockDetail from './components/StockDetail';
 import BottomNavigation from './components/BottomNavigation';
 
 const App: React.FC = () => {
@@ -21,6 +22,7 @@ const App: React.FC = () => {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/markets" element={<Markets />} />
+                <Route path="/markets/:symbol" element={<StockDetail />} />
                 <Route path="/news" element={<News />} />
                 <Route path="/discover" element={<Discover />} />
                 <Route path="/portfolio" element={<Portfolio />} />
