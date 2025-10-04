@@ -268,7 +268,7 @@ const StockDetail: React.FC = () => {
         )}
       </div>
 
-      {/* Trading Modal */}
+      {/* Trading Model */}
       <TradingModel
         stock={stock}
         isOpen={isModalOpen}
