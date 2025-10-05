@@ -3,13 +3,13 @@ import { useAppContext } from '../components/AppContext';
 import { Stock } from '../types';
 import './TradingModel.css';
 
-interface TradingModalProps {
+interface TradingModelProps {
   stock: Stock | null;
   isOpen: boolean;
   onClose: () => void;
 }
 
-const TradingModal: React.FC<TradingModalProps> = ({ stock, isOpen, onClose }) => {
+const TradingModel: React.FC<TradingModelProps> = ({ stock, isOpen, onClose }) => {
   const { buyStock, sellStock, userBalance, portfolio } = useAppContext();
   const [tradeType, setTradeType] = useState<'buy' | 'sell'>('buy');
   const [shares, setShares] = useState<string>('');
@@ -59,20 +59,20 @@ const TradingModal: React.FC<TradingModalProps> = ({ stock, isOpen, onClose }) =
   };
 
   return (
-    <div className="modal-overlay" onClick={handleClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
+    <div className="model-overlay" onClick={handleClose}>
+      <div className="model-content" onClick={(e) => e.stopPropagation()}>
+        <div className="model-header">
           <h2>Trade {stock.symbol}</h2>
           <button className="close-btn" onClick={handleClose}>×</button>
         </div>
 
-        <div className="stock-info-modal">
+        <div className="stock-info-model">
           <h3>{stock.name}</h3>
-          <div className="current-price-modal">
+          <div className="current-price-model">
             <span className="price-label">Current Price:</span>
             <span className="price-value">KES {stock.price.toFixed(2)}</span>
           </div>
-          <div className={`price-change-modal ${stock.change >= 0 ? 'positive' : 'negative'}`}>
+          <div className={`price-change-model ${stock.change >= 0 ? 'positive' : 'negative'}`}>
             {stock.change >= 0 ? '+' : ''}{stock.change.toFixed(2)} ({stock.changePercent.toFixed(2)}%)
           </div>
         </div>
@@ -144,4 +144,4 @@ const TradingModal: React.FC<TradingModalProps> = ({ stock, isOpen, onClose }) =
   );
 };
 
-export default TradingModal;
+export default TradingModel;

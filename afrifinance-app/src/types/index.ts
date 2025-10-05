@@ -70,3 +70,18 @@ export interface SettingsOption {
   title: string;
   description: string;
 }
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  avatar: string;
+  memberSince: string;
+}
+
+export interface AuthContextType {
+  user: User | null;
+  isAuthenticated: boolean;
+  login: (email: string, password: string) => Promise<{ success: boolean; message: string }>;
+  signup: (name: string, email: string, password: string) => Promise<{ success: boolean; message: string }>;
+  logout: () => void;
+}

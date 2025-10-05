@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAppContext } from '../components/AppContext';
 import { Stock } from '../types';
 import { useNavigate } from 'react-router-dom';
-import TradingModal from './TradingModel';
+import TradingModel from './TradingModel';
 import './Markets.css';
 
 
@@ -124,8 +124,8 @@ const Markets: React.FC = () => {
         </div>
       </div>
 
-      {/* Trading Modal */}
-      <TradingModal
+      {/* Trading Model */}
+      <TradingModel
         stock={selectedStock}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

@@ -1,8 +1,10 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AppProvider } from './components/AppContext';
+import { AuthProvider, useAuth} from './components/AuthContext';
 import './App.css';
 
+import Auth from './components/Auth';
 import Home from './components/Home';
 import Markets from './components/Markets';
 import News from './components/News';
@@ -12,28 +14,94 @@ import Profile from './components/Profile';
 import StockDetail from './components/StockDetail';
 import BottomNavigation from './components/BottomNavigation';
 
+const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { isAuthenticated } = useAuth();
+  return isAuthenticated ? <>{children}</> : <Navigate to="/auth" />;
+};
+
+const AppRoutes: React.FC = () => {
+  const { isAuthenticated } = useAuth();
+
+  return (
+    <Routes>
+      <Route path="/auth" element={isAuthenticated ? <Navigate to="/" /> : <Auth />} />
+      
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/markets"
+        element={
+          <ProtectedRoute>
+            <Markets />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/stock/:symbol"
+        element={
+          <ProtectedRoute>
+            <StockDetail />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/news"
+        element={
+          <ProtectedRoute>
+            <News />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/discover"
+        element={
+          <ProtectedRoute>
+            <Discover />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/portfolio"
+        element={
+          <ProtectedRoute>
+            <Portfolio />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/Profile"
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        }
+      />
+    </Routes>
+  );
+};
+
 const App: React.FC = () => {
   return (
-    <AppProvider>
-      <Router>
-        <div className="app">
-          <div className="container">
-            <main className="main-content">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/markets" element={<Markets />} />
-                <Route path="/stock/:symbol" element={<StockDetail />} />
-                <Route path="/news" element={<News />} />
-                <Route path="/discover" element={<Discover />} />
-                <Route path="/portfolio" element={<Portfolio />} />
-                <Route path="/account" element={<Profile />} />
-              </Routes>
-            </main>
-            <BottomNavigation />
+    <AuthProvider>
+      <AppProvider>
+        <Router>
+          <div className="app">
+            <div className="container">
+              <main className="main-content">
+                <AppRoutes />
+              </main>
+              <BottomNavigation />
+            </div>
           </div>
-        </div>
-      </Router>
-    </AppProvider>
+        </Router>
+      </AppProvider>
+    </AuthProvider>
   );
 };
 

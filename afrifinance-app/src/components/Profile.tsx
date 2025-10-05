@@ -1,7 +1,9 @@
 import React from 'react';
+import { useAuth } from '../components/AuthContext';
 import './Profile.css';
 
-const Profile = () => {
+const Profile: React.FC = () => {
+  const { user, logout } = useAuth();
   const subscriptionPlans = [
     {
       name: 'Free',
@@ -80,11 +82,11 @@ const Profile = () => {
         </div>
 
         <div className="profile-info">
-          <div className="profile-avatar">JK</div>
+          <div className="profile-avatar">{user?.avatar}</div>
           <div className="profile-details">
             <h3>John Kamau</h3>
             <div className="profile-badge">👑 Free</div>
-            <div className="profile-member-since">Member since Dec 2024</div>
+            <div className="profile-member-since">Member since {user?.memberSince}</div>
           </div>
         </div>
 
@@ -136,10 +138,11 @@ const Profile = () => {
 
       {/* Logout */}
       <div className="logout-section">
-        <button className="logout-btn">Sign Out</button>
+        <button className="logout-btn" onClick={logout}>Sign Out</button>
       </div>
     </div>
   );
 };
+
 
 export default Profile;
