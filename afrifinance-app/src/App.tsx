@@ -13,6 +13,7 @@ import Portfolio from './components/Portfolio';
 import Profile from './components/Profile';
 import StockDetail from './components/StockDetail';
 import BottomNavigation from './components/BottomNavigation';
+import EnhancedStockDetail from './components/EnhancedStockDetail';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated } = useAuth();
@@ -46,7 +47,7 @@ const AppRoutes: React.FC = () => {
         path="/stock/:symbol"
         element={
           <ProtectedRoute>
-            <StockDetail />
+            <EnhancedStockDetail />
           </ProtectedRoute>
         }
       />

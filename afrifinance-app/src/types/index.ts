@@ -85,3 +85,49 @@ export interface AuthContextType {
   signup: (name: string, email: string, password: string) => Promise<{ success: boolean; message: string }>;
   logout: () => void;
 }
+export interface Stock {
+  symbol: string;
+  name: string;
+  price: number;
+  change: number;
+  changePercent: number;
+  // Extended data
+  open?: number;
+  high?: number;
+  low?: number;
+  close?: number;
+  volume?: number;
+  marketCap?: number;
+  peRatio?: number;
+  dividendYield?: number;
+  week52High?: number;
+  week52Low?: number;
+  avgVolume?: number;
+  beta?: number;
+  eps?: number;
+  sector?: string;
+  industry?: string;
+}
+
+export interface OrderBook {
+  bids: { price: number; volume: number }[];
+  asks: { price: number; volume: number }[];
+}
+
+export interface StockNews {
+  title: string;
+  summary: string;
+  source: string;
+  publishedAt: string;
+  url: string;
+}
+
+export interface Financials {
+  revenue: number;
+  netIncome: number;
+  grossProfit: number;
+  operatingIncome: number;
+  totalAssets: number;
+  totalLiabilities: number;
+  cashFlow: number;
+}
