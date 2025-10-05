@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 import { Stock, PortfolioHolding, TradeResult, AppContextType } from '../types';
+import { stockApi } from '../services/stockApi'; 
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
@@ -16,7 +17,7 @@ interface AppProviderProps {
 }
 
 export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
-  const [stocks] = useState<Stock[]>([
+  const [stocks, setStocks] = useState<Stock[]>([
     { symbol: 'SAFCOM', name: 'Safaricom PLC', price: 26.80, change: 1.20, changePercent: 4.69 },
     { symbol: 'EQTY', name: 'Equity Group', price: 45.50, change: 2.30, changePercent: 5.33 },
     { symbol: 'KCB', name: 'KCB Group', price: 42.25, change: -0.75, changePercent: -1.74 },
@@ -34,6 +35,26 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
 
   const [watchlist, setWatchlist] = useState<string[]>(['SAFCOM', 'EQTY']);
   const [userBalance, setUserBalance] = useState<number>(50000);
+
+  // ✅ Add this
+  const [isLoading, setIsLoading] = useState(false);
+
+  // ✅ Function to refresh stock data from API
+  const refreshStockData = async () => {
+    setIsLoading(true);
+    try {
+      const symbols = stocks.map(s => s.symbol);
+      const updatedStocks = await stockApi.getMultipleQuotes(symbols);
+
+      if (updatedStocks.length > 0) {
+        setStocks(updatedStocks);
+      }
+    } catch (error) {
+      console.error('Error refreshing stock data:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const addToWatchlist = (symbol: string): void => {
     if (!watchlist.includes(symbol)) {
@@ -104,17 +125,20 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     }, 0);
   };
 
+  // ✅ Add isLoading and refreshStockData to context value
   const value: AppContextType = {
     stocks,
     portfolio,
     watchlist,
     userBalance,
+    isLoading,
     addToWatchlist,
     removeFromWatchlist,
     buyStock,
     sellStock,
     getStock,
-    getPortfolioValue
+    getPortfolioValue,
+    refreshStockData
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

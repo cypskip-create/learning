@@ -5,9 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import TradingModel from './TradingModel';
 import './Markets.css';
 
+  
 
 const Markets: React.FC = () => {
-  const { stocks } = useAppContext();
+  const { stocks, refreshStockData, isLoading } = useAppContext();
   const [activeTab, setActiveTab] = useState('stocks');
   const [selectedStock, setSelectedStock] = useState<Stock | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -46,9 +47,25 @@ const Markets: React.FC = () => {
           <p>Global market overview</p>
         </div>
         <div className="header-right">
-          <div className="header-icon">🔍</div>
-          <div className="header-icon">🔔</div>
+          
         </div>
+        <div className="header-right">
+    <button 
+      onClick={refreshStockData} 
+      disabled={isLoading}
+      style={{ 
+        background: '#00ff88', 
+        border: 'none', 
+        padding: '8px 16px', 
+        borderRadius: '8px',
+        cursor: isLoading ? 'not-allowed' : 'pointer'
+      }}
+    >
+      {isLoading ? '🔄 Refreshing...' : '🔄 Refresh'}
+    </button>
+    <div className="header-icon">🔍</div>
+    <div className="header-icon">🔔</div>
+  </div>
       </div>
 
       {/* AI Quick Take */}
@@ -133,6 +150,6 @@ const Markets: React.FC = () => {
     </div>
   );
 };
-           
+         
 
 export default Markets;

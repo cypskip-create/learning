@@ -22,12 +22,15 @@ export interface AppContextType {
   portfolio: PortfolioHolding[];
   watchlist: string[];
   userBalance: number;
+  isLoading: boolean;
+  refreshStockData: () => void;
   addToWatchlist: (symbol: string) => void;
   removeFromWatchlist: (symbol: string) => void;
   buyStock: (symbol: string, shares: number, price: number) => TradeResult;
   sellStock: (symbol: string, shares: number, price: number) => TradeResult;
   getStock: (symbol: string) => Stock | undefined;
   getPortfolioValue: () => number;
+  
 }
 
 export interface NewsArticle {
@@ -91,7 +94,6 @@ export interface Stock {
   price: number;
   change: number;
   changePercent: number;
-  // Extended data
   open?: number;
   high?: number;
   low?: number;
