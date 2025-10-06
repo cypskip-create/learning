@@ -1,9 +1,8 @@
 import { Stock } from '../types';
 
-const ALPHA_VANTAGE_API_KEY = 'YOUR_API_KEY'; // Get free key from alphavantage.co
+const ALPHA_VANTAGE_API_KEY = 'Z4PKVFUZW0MGXETD'; 
 const BASE_URL = 'https://www.alphavantage.co/query';
 
-// For demo purposes, we'll create a service that can be easily swapped with real API
 class StockApiService {
   // Fetch real-time quote
   async getQuote(symbol: string): Promise<Stock | null> {

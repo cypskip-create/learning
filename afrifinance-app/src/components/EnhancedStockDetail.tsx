@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAppContext } from '../components/AppContext';
-import TradingModal from './TradingModel';
+import TradingModel from './TradingModel';
 import './EnhancedStockDetail.css';
 
 const EnhancedStockDetail: React.FC = () => {
@@ -9,13 +9,25 @@ const EnhancedStockDetail: React.FC = () => {
   const navigate = useNavigate();
   const { getStock, portfolio, watchlist, addToWatchlist, removeFromWatchlist } = useAppContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [tradeType, setTradeType] = useState<'buy' | 'sell'>('buy');
   const [activeTab, setActiveTab] = useState('overview');
   const [timeframe, setTimeframe] = useState('1D');
-  const [orderType, setOrderType] = useState('market');
 
   const stock = symbol ? getStock(symbol) : null;
   const holding = stock ? portfolio.find(p => p.symbol === stock.symbol) : null;
   const isInWatchlist = stock ? watchlist.includes(stock.symbol) : false;
+
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isModalOpen]);
 
   if (!stock) {
     return (
@@ -36,6 +48,16 @@ const EnhancedStockDetail: React.FC = () => {
     } else {
       addToWatchlist(stock.symbol);
     }
+  };
+
+  const handleBuyClick = () => {
+    setTradeType('buy');
+    setIsModalOpen(true);
+  };
+
+  const handleSellClick = () => {
+    setTradeType('sell');
+    setIsModalOpen(true);
   };
 
   // Mock order book data
@@ -70,13 +92,46 @@ const EnhancedStockDetail: React.FC = () => {
     netIncome: (Math.random() * 10 + 2).toFixed(2) + 'B'
   };
 
+  // Mock institutional holdings
+  const institutionalHoldings = [
+    { name: 'Vanguard Group', shares: 2500000, percentage: 12.5 },
+    { name: 'BlackRock Inc', shares: 2100000, percentage: 10.5 },
+    { name: 'State Street Corp', shares: 1800000, percentage: 9.0 },
+    { name: 'NCBA Bank', shares: 1500000, percentage: 7.5 },
+    { name: 'Britam Holdings', shares: 1200000, percentage: 6.0 }
+  ];
+
+  // Mock insider transactions
+  const insiderTransactions = [
+    { name: 'John Doe', title: 'CEO', type: 'Buy', shares: 50000, price: stock.price - 2, date: '2025-01-15' },
+    { name: 'Jane Smith', title: 'CFO', type: 'Sell', shares: 25000, price: stock.price + 1, date: '2025-01-10' },
+    { name: 'Bob Johnson', title: 'Director', type: 'Buy', shares: 10000, price: stock.price - 1.5, date: '2025-01-05' }
+  ];
+
+  // Mock dividend history
+  const dividendHistory = [
+    { date: '2024-12-01', amount: 2.5, yield: 3.2 },
+    { date: '2024-09-01', amount: 2.5, yield: 3.1 },
+    { date: '2024-06-01', amount: 2.3, yield: 2.9 },
+    { date: '2024-03-01', amount: 2.3, yield: 3.0 },
+    { date: '2023-12-01', amount: 2.2, yield: 2.8 }
+  ];
+
+  // Mock peer comparison
+  const peerComparison = [
+    { name: stock.name, symbol: stock.symbol, price: stock.price, peRatio: keyMetrics.peRatio, marketCap: keyMetrics.marketCap, change: stock.changePercent },
+    { name: 'KCB Group', symbol: 'KCB', price: 42.25, peRatio: '8.5', marketCap: '65.2B', change: -0.75 },
+    { name: 'Co-op Bank', symbol: 'COOP', price: 14.30, peRatio: '6.8', marketCap: '42.1B', change: -0.20 },
+    { name: 'Absa Bank', symbol: 'ABSA', price: 11.95, peRatio: '7.2', marketCap: '38.5B', change: 0.45 }
+  ];
+
   return (
     <div className="enhanced-stock-detail">
       {/* Sticky Header */}
       <div className="sticky-header">
         <div className="header-top">
           <button className="back-btn" onClick={() => navigate(-1)}>
-            ← 
+            ←
           </button>
           <div className="stock-mini-info">
             <span className="mini-symbol">{stock.symbol}</span>
@@ -118,12 +173,12 @@ const EnhancedStockDetail: React.FC = () => {
 
       {/* Quick Actions */}
       <div className="quick-actions">
-        <button className="quick-action-btn buy" onClick={() => setIsModalOpen(true)}>
+        <button className="quick-action-btn buy" onClick={handleBuyClick}>
           <span className="action-icon">📈</span>
           <span>Buy</span>
         </button>
         {holding && (
-          <button className="quick-action-btn sell" onClick={() => setIsModalOpen(true)}>
+          <button className="quick-action-btn sell" onClick={handleSellClick}>
             <span className="action-icon">📉</span>
             <span>Sell</span>
           </button>
@@ -241,7 +296,7 @@ const EnhancedStockDetail: React.FC = () => {
       {/* Detailed Tabs */}
       <div className="detail-tabs-section">
         <div className="detail-tabs">
-          {['Overview', 'Financials', 'Analysis', 'News', 'Options'].map(tab => (
+          {['Overview', 'Financials', 'Analysis', 'Institutional', 'Insider', 'Peers', 'Dividends', 'News'].map(tab => (
             <button
               key={tab}
               className={`detail-tab ${activeTab === tab.toLowerCase() ? 'active' : ''}`}
@@ -399,6 +454,95 @@ const EnhancedStockDetail: React.FC = () => {
             </div>
           )}
 
+          {activeTab === 'institutional' && (
+            <div className="institutional-tab">
+              <h4>Top Institutional Holders</h4>
+              <div className="institutional-list">
+                {institutionalHoldings.map((holder, idx) => (
+                  <div key={idx} className="institutional-item">
+                    <div className="holder-info">
+                      <strong>{holder.name}</strong>
+                      <span>{holder.shares.toLocaleString()} shares</span>
+                    </div>
+                    <div className="holder-percentage">
+                      <strong>{holder.percentage}%</strong>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'insider' && (
+            <div className="insider-tab">
+              <h4>Recent Insider Transactions</h4>
+              <div className="insider-list">
+                {insiderTransactions.map((transaction, idx) => (
+                  <div key={idx} className="insider-item">
+                    <div className="insider-info">
+                      <strong>{transaction.name}</strong>
+                      <span>{transaction.title}</span>
+                      <span className="transaction-date">{transaction.date}</span>
+                    </div>
+                    <div className="transaction-details">
+                      <span className={`transaction-type ${transaction.type.toLowerCase()}`}>
+                        {transaction.type}
+                      </span>
+                      <span>{transaction.shares.toLocaleString()} shares</span>
+                      <span>@ {transaction.price.toFixed(2)}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'peers' && (
+            <div className="peers-tab">
+              <h4>Peer Comparison</h4>
+              <div className="peers-table">
+                <div className="table-header">
+                  <span>Company</span>
+                  <span>Price</span>
+                  <span>P/E</span>
+                  <span>Mkt Cap</span>
+                  <span>Change</span>
+                </div>
+                {peerComparison.map((peer, idx) => (
+                  <div key={idx} className={`table-row ${peer.symbol === stock.symbol ? 'current' : ''}`}>
+                    <div className="peer-name">
+                      <strong>{peer.symbol}</strong>
+                      <span>{peer.name}</span>
+                    </div>
+                    <span>{peer.price.toFixed(2)}</span>
+                    <span>{peer.peRatio}</span>
+                    <span>{peer.marketCap}</span>
+                    <span className={peer.change >= 0 ? 'positive' : 'negative'}>
+                      {peer.change >= 0 ? '+' : ''}{peer.change.toFixed(2)}%
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'dividends' && (
+            <div className="dividends-tab">
+              <h4>Dividend History</h4>
+              <div className="dividend-list">
+                {dividendHistory.map((dividend, idx) => (
+                  <div key={idx} className="dividend-item">
+                    <div className="dividend-date">{dividend.date}</div>
+                    <div className="dividend-details">
+                      <strong>KES {dividend.amount.toFixed(2)}</strong>
+                      <span>Yield: {dividend.yield}%</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {activeTab === 'news' && (
             <div className="news-tab">
               <div className="news-list">
@@ -418,12 +562,15 @@ const EnhancedStockDetail: React.FC = () => {
         </div>
       </div>
 
-      {/* Trading Modal */}
-      <TradingModal
-        stock={stock}
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
+      {/* Trading Model */}
+      {isModalOpen && (
+        <TradingModel
+          stock={stock}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          initialTradeType={tradeType}
+        />
+      )}
     </div>
   );
 };

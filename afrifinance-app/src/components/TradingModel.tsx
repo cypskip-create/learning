@@ -1,144 +1,231 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAppContext } from '../components/AppContext';
 import { Stock } from '../types';
 import './TradingModel.css';
 
 interface TradingModelProps {
-  stock: Stock | null;
+  stock: Stock;
   isOpen: boolean;
   onClose: () => void;
+  initialTradeType?: 'buy' | 'sell';
 }
 
-const TradingModel: React.FC<TradingModelProps> = ({ stock, isOpen, onClose }) => {
-  const { buyStock, sellStock, userBalance, portfolio } = useAppContext();
-  const [tradeType, setTradeType] = useState<'buy' | 'sell'>('buy');
-  const [shares, setShares] = useState<string>('');
-  const [notification, setNotification] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+const TradingModel: React.FC<TradingModelProps> = ({ stock, isOpen, onClose, initialTradeType = 'buy' }) => {
+  const { buyStock, sellStock, portfolio, balance } = useAppContext();
+  const [tradeType, setTradeType] = useState<'buy' | 'sell'>(initialTradeType);
+  const [shares, setShares] = useState<number>(1);
+  const [orderType, setOrderType] = useState<'market' | 'limit'>('market');
+  const [limitPrice, setLimitPrice] = useState<string>(stock.price.toFixed(2));
+  const [notification, setNotification] = useState<{ type: 'success' | 'error', message: string } | null>(null);
 
-  if (!isOpen || !stock) return null;
+  // Update trade type when initialTradeType changes
+  useEffect(() => {
+    setTradeType(initialTradeType);
+  }, [initialTradeType]);
+
+  // Reset form when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setShares(1);
+      setOrderType('market');
+      setLimitPrice(stock.price.toFixed(2));
+      setNotification(null);
+    }
+  }, [isOpen, stock.price]);
 
   const holding = portfolio.find(p => p.symbol === stock.symbol);
-  const sharesOwned = holding?.shares || 0;
-  const totalCost = parseFloat(shares || '0') * stock.price;
-  const canAfford = totalCost <= userBalance;
-  const canSell = tradeType === 'sell' && sharesOwned >= parseFloat(shares || '0');
+  const executePrice = orderType === 'market' ? stock.price : parseFloat(limitPrice) || stock.price;
+  const totalCost = shares * executePrice;
+  const canBuy = totalCost <= balance && shares > 0;
+  const canSell = holding && shares <= holding.shares && shares > 0;
+
+  if (!isOpen) return null;
 
   const handleTrade = () => {
-    const numShares = parseFloat(shares);
-    
-    if (!numShares || numShares <= 0) {
-      setNotification({ message: 'Please enter a valid number of shares', type: 'error' });
-      return;
-    }
-
-    let result;
-    if (tradeType === 'buy') {
-      result = buyStock(stock.symbol, numShares, stock.price);
-    } else {
-      result = sellStock(stock.symbol, numShares, stock.price);
-    }
-
-    setNotification({ 
-      message: result.message, 
-      type: result.success ? 'success' : 'error' 
-    });
-
-    if (result.success) {
-      setShares('');
-      setTimeout(() => {
-        onClose();
-        setNotification(null);
-      }, 2000);
+    try {
+      if (tradeType === 'buy') {
+        if (!canBuy) {
+          setNotification({ type: 'error', message: 'Insufficient balance!' });
+          return;
+        }
+        buyStock(stock.symbol, shares, executePrice);
+        setNotification({ type: 'success', message: `Successfully bought ${shares} shares of ${stock.symbol}!` });
+        setTimeout(() => {
+          onClose();
+        }, 1500);
+      } else if (tradeType === 'sell') {
+        if (!canSell) {
+          setNotification({ type: 'error', message: 'Insufficient shares!' });
+          return;
+        }
+        sellStock(stock.symbol, shares, executePrice);
+        setNotification({ type: 'success', message: `Successfully sold ${shares} shares of ${stock.symbol}!` });
+        setTimeout(() => {
+          onClose();
+        }, 1500);
+      }
+    } catch (error) {
+      setNotification({ type: 'error', message: 'Transaction failed. Please try again.' });
     }
   };
 
-  const handleClose = () => {
-    setShares('');
-    setNotification(null);
-    onClose();
+  const handleOverlayClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
+  const handleSharesChange = (value: string) => {
+    const numValue = parseInt(value) || 0;
+    if (numValue >= 0) {
+      setShares(numValue);
+    }
   };
 
   return (
-    <div className="model-overlay" onClick={handleClose}>
-      <div className="model-content" onClick={(e) => e.stopPropagation()}>
-        <div className="model-header">
-          <h2>Trade {stock.symbol}</h2>
-          <button className="close-btn" onClick={handleClose}>×</button>
+    <div className="trading-modal-overlay" onClick={handleOverlayClick}>
+      <div className="trading-modal-content">
+        <div className="modal-header">
+          <h2>{tradeType === 'buy' ? 'Buy' : 'Sell'} {stock.symbol}</h2>
+          <button className="modal-close-btn" onClick={onClose}>×</button>
         </div>
 
-        <div className="stock-info-model">
-          <h3>{stock.name}</h3>
-          <div className="current-price-model">
-            <span className="price-label">Current Price:</span>
-            <span className="price-value">KES {stock.price.toFixed(2)}</span>
-          </div>
-          <div className={`price-change-model ${stock.change >= 0 ? 'positive' : 'negative'}`}>
-            {stock.change >= 0 ? '+' : ''}{stock.change.toFixed(2)} ({stock.changePercent.toFixed(2)}%)
-          </div>
-        </div>
-
-        <div className="trade-type-selector">
-          <button
-            className={`type-btn ${tradeType === 'buy' ? 'active buy' : ''}`}
-            onClick={() => setTradeType('buy')}
-          >
-            BUY
-          </button>
-          <button
-            className={`type-btn ${tradeType === 'sell' ? 'active sell' : ''}`}
-            onClick={() => setTradeType('sell')}
-          >
-            SELL
-          </button>
-        </div>
-
-        <div className="form-section">
-          <label>Number of Shares</label>
-          <input
-            type="number"
-            value={shares}
-            onChange={(e) => setShares(e.target.value)}
-            placeholder="Enter shares"
-            min="1"
-          />
-          {tradeType === 'sell' && (
-            <div className="shares-owned">You own: {sharesOwned} shares</div>
+        <div className="modal-body">
+          {/* Notification */}
+          {notification && (
+            <div className={`notification ${notification.type}`}>
+              {notification.message}
+            </div>
           )}
+
+          {/* Stock Info */}
+          <div className="price-display">
+            <span className="label">{stock.name}</span>
+            <span className="value">KES {stock.price.toFixed(2)}</span>
+          </div>
+
+          {/* Trade Type Toggle */}
+          <div className="trade-type-toggle">
+            <button
+              className={`toggle-btn ${tradeType === 'buy' ? 'active buy' : ''}`}
+              onClick={() => setTradeType('buy')}
+            >
+              Buy
+            </button>
+            <button
+              className={`toggle-btn ${tradeType === 'sell' ? 'active sell' : ''}`}
+              onClick={() => setTradeType('sell')}
+              disabled={!holding}
+            >
+              Sell {!holding && '(No shares)'}
+            </button>
+          </div>
+
+          {/* Order Type */}
+          <div className="order-type-section">
+            <label>Order Type</label>
+            <div className="order-type-btns">
+              <button
+                className={`order-type-btn ${orderType === 'market' ? 'active' : ''}`}
+                onClick={() => setOrderType('market')}
+              >
+                Market Order
+              </button>
+              <button
+                className={`order-type-btn ${orderType === 'limit' ? 'active' : ''}`}
+                onClick={() => setOrderType('limit')}
+              >
+                Limit Order
+              </button>
+            </div>
+          </div>
+
+          {/* Limit Price Input (if limit order) */}
+          {orderType === 'limit' && (
+            <div className="input-group">
+              <label>Limit Price (KES)</label>
+              <input
+                type="number"
+                value={limitPrice}
+                onChange={(e) => setLimitPrice(e.target.value)}
+                step="0.01"
+                min="0"
+              />
+            </div>
+          )}
+
+          {/* Shares Input */}
+          <div className="input-group">
+            <label>Number of Shares</label>
+            <div className="shares-input-wrapper">
+              <button
+                className="share-btn"
+                onClick={() => setShares(Math.max(0, shares - 1))}
+              >
+                -
+              </button>
+              <input
+                type="number"
+                value={shares}
+                onChange={(e) => handleSharesChange(e.target.value)}
+                min="0"
+                max={tradeType === 'sell' && holding ? holding.shares : undefined}
+              />
+              <button
+                className="share-btn"
+                onClick={() => setShares(shares + 1)}
+              >
+                +
+              </button>
+            </div>
+            {tradeType === 'sell' && holding && (
+              <span className="available-shares">Available: {holding.shares} shares</span>
+            )}
+            {tradeType === 'buy' && (
+              <span className="available-shares">Available balance: KES {balance.toFixed(2)}</span>
+            )}
+          </div>
+
+          {/* Total Cost/Proceeds */}
+          <div className="total-section">
+            <div className="total-row">
+              <span>Total {tradeType === 'buy' ? 'Cost' : 'Proceeds'}</span>
+              <span className="total-value">KES {totalCost.toFixed(2)}</span>
+            </div>
+          </div>
+
+          {/* Warning Messages */}
+          {tradeType === 'buy' && !canBuy && shares > 0 && (
+            <div className="warning-message">
+              ⚠️ Insufficient balance. You need KES {(totalCost - balance).toFixed(2)} more.
+            </div>
+          )}
+
+          {tradeType === 'sell' && !canSell && shares > 0 && (
+            <div className="warning-message">
+              ⚠️ You don't have enough shares. You only have {holding?.shares || 0} shares.
+            </div>
+          )}
+
+          {shares === 0 && (
+            <div className="warning-message">
+              ⚠️ Please enter a valid number of shares (minimum 1).
+            </div>
+          )}
+
+          {/* Action Button */}
+          <button
+            className={`trade-action-btn ${tradeType}`}
+            onClick={handleTrade}
+            disabled={
+              shares === 0 ||
+              (tradeType === 'buy' && !canBuy) ||
+              (tradeType === 'sell' && !canSell)
+            }
+          >
+            {tradeType === 'buy' ? '📈 Buy Now' : '📉 Sell Now'}
+          </button>
         </div>
-
-        <div className="trade-summary">
-          <div className="summary-row">
-            <span>Price per share:</span>
-            <span>KES {stock.price.toFixed(2)}</span>
-          </div>
-          <div className="summary-row">
-            <span>Total {tradeType === 'buy' ? 'cost' : 'proceeds'}:</span>
-            <span className="total-amount">KES {totalCost.toFixed(2)}</span>
-          </div>
-          <div className="summary-row">
-            <span>Available balance:</span>
-            <span>KES {userBalance.toFixed(2)}</span>
-          </div>
-        </div>
-
-        {notification && (
-          <div className={`notification ${notification.type}`}>
-            {notification.message}
-          </div>
-        )}
-
-        <button
-          className={`execute-trade-btn ${tradeType === 'buy' ? 'buy-btn' : 'sell-btn'}`}
-          onClick={handleTrade}
-          disabled={
-            !shares || 
-            parseFloat(shares) <= 0 || 
-            (tradeType === 'buy' && !canAfford) ||
-            (tradeType === 'sell' && !canSell)
-          }
-        >
-          {tradeType === 'buy' ? 'Buy' : 'Sell'} {shares || '0'} Shares
-        </button>
       </div>
     </div>
   );

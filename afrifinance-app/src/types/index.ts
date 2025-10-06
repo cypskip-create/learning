@@ -22,6 +22,7 @@ export interface AppContextType {
   portfolio: PortfolioHolding[];
   watchlist: string[];
   userBalance: number;
+  balance:number;
   isLoading: boolean;
   refreshStockData: () => void;
   addToWatchlist: (symbol: string) => void;

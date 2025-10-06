@@ -142,11 +142,13 @@ const Markets: React.FC = () => {
       </div>
 
       {/* Trading Model */}
+      {selectedStock &&(
       <TradingModel
         stock={selectedStock}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />
+      )}
     </div>
   );
 };

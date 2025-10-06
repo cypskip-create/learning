@@ -11,7 +11,6 @@ import News from './components/News';
 import Discover from './components/Discover';
 import Portfolio from './components/Portfolio';
 import Profile from './components/Profile';
-import StockDetail from './components/StockDetail';
 import BottomNavigation from './components/BottomNavigation';
 import EnhancedStockDetail from './components/EnhancedStockDetail';
 
