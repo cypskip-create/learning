@@ -54,6 +54,15 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     }
   };
 
+  // ✅ Add missing toggleWatchlist function
+  const toggleWatchlist = (symbol: string): void => {
+    setWatchlist((prev) =>
+      prev.includes(symbol)
+        ? prev.filter((s) => s !== symbol)
+        : [...prev, symbol]
+    );
+  };
+
   const addToWatchlist = (symbol: string): void => {
     if (!watchlist.includes(symbol)) {
       setWatchlist([...watchlist, symbol]);
@@ -123,13 +132,15 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     }, 0);
   };
 
+  // ✅ Value for context
   const value: AppContextType = {
     stocks,
     portfolio,
     watchlist,
     userBalance,
-    balance: userBalance, 
+    balance: userBalance,
     isLoading,
+    toggleWatchlist,
     addToWatchlist,
     removeFromWatchlist,
     buyStock,

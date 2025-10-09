@@ -4,20 +4,35 @@ import { useAppContext } from '../components/AppContext';
 import TradingModel from './TradingModel';
 import './EnhancedStockDetail.css';
 
+interface Stock {
+  symbol: string;
+  name: string;
+  price: number;
+  change: number;
+  changePercent: number;
+}
+
+interface Holding {
+  symbol: string;
+  shares: number;
+  buyPrice: number;
+}
+
 const EnhancedStockDetail: React.FC = () => {
   const { symbol } = useParams<{ symbol: string }>();
   const navigate = useNavigate();
   const { getStock, portfolio, watchlist, addToWatchlist, removeFromWatchlist } = useAppContext();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [tradeType, setTradeType] = useState<'buy' | 'sell'>('buy');
-  const [activeTab, setActiveTab] = useState('overview');
-  const [timeframe, setTimeframe] = useState('1D');
+  const [activeTab, setActiveTab] = useState<string>('overview');
+  const [timeframe, setTimeframe] = useState<string>('1D');
+  const [isFeaturesDropdownOpen, setIsFeaturesDropdownOpen] = useState<boolean>(false);
 
-  const stock = symbol ? getStock(symbol) : null;
-  const holding = stock ? portfolio.find(p => p.symbol === stock.symbol) : null;
-  const isInWatchlist = stock ? watchlist.includes(stock.symbol) : false;
+  const stock: Stock | null = symbol ? (getStock(symbol) || null) : null;
+  const holding: Holding | undefined = stock ? portfolio.find((p: Holding) => p.symbol === stock.symbol) : undefined;
+  const isInWatchlist: boolean = stock ? watchlist.includes(stock.symbol) : false;
 
-  // Prevent body scroll when modal is open
+  // Prevent body scroll when model is open
   useEffect(() => {
     if (isModalOpen) {
       document.body.style.overflow = 'hidden';
@@ -42,7 +57,7 @@ const EnhancedStockDetail: React.FC = () => {
     );
   }
 
-  const handleWatchlist = () => {
+  const handleWatchlist = (): void => {
     if (isInWatchlist) {
       removeFromWatchlist(stock.symbol);
     } else {
@@ -50,12 +65,12 @@ const EnhancedStockDetail: React.FC = () => {
     }
   };
 
-  const handleBuyClick = () => {
+  const handleBuyClick = (): void => {
     setTradeType('buy');
     setIsModalOpen(true);
   };
 
-  const handleSellClick = () => {
+  const handleSellClick = (): void => {
     setTradeType('sell');
     setIsModalOpen(true);
   };
@@ -162,40 +177,161 @@ const EnhancedStockDetail: React.FC = () => {
           </div>
         </div>
 
-        <div className="price-section">
-          <div className="current-price-large">KES {stock.price.toFixed(2)}</div>
-          <div className={`price-change-large ${stock.change >= 0 ? 'positive' : 'negative'}`}>
-            {stock.change >= 0 ? '+' : ''}{stock.change.toFixed(2)} ({stock.changePercent.toFixed(2)}%)
-          </div>
-          <div className="price-time">Market Open • Updated just now</div>
-        </div>
-      </div>
+        <div className="price-time">Market Open • Updated just now</div>
 
-      {/* Quick Actions */}
-      <div className="quick-actions">
-        <button className="quick-action-btn buy" onClick={handleBuyClick}>
-          <span className="action-icon">📈</span>
-          <span>Buy</span>
-        </button>
-        {holding && (
-          <button className="quick-action-btn sell" onClick={handleSellClick}>
-            <span className="action-icon">📉</span>
-            <span>Sell</span>
-          </button>
-        )}
-        <button className="quick-action-btn">
-          <span className="action-icon">⚡</span>
-          <span>Alerts</span>
-        </button>
-        <button className="quick-action-btn">
-          <span className="action-icon">📰</span>
-          <span>News</span>
-        </button>
+        <div className="price-section">
+          <div className="price-main">
+            <div className="current-price-large">KES {stock.price.toFixed(2)}</div>
+            <div className={`price-change-large ${stock.change >= 0 ? 'positive' : 'negative'}`}>
+              {stock.change >= 0 ? '+' : ''}{stock.change.toFixed(2)} ({stock.changePercent.toFixed(2)}%)
+            </div>
+          </div>
+
+          {/* Features Dropdown */}
+          <div className="features-dropdown">
+            <button 
+              className="features-dropdown-toggle"
+              onClick={() => setIsFeaturesDropdownOpen(!isFeaturesDropdownOpen)}
+            >
+              <span>Market Data</span>
+              <span className={`dropdown-arrow ${isFeaturesDropdownOpen ? 'open' : ''}`}>▼</span>
+            </button>
+
+            {isFeaturesDropdownOpen && (
+              <div className="features-dropdown-content">
+                <div className="market-data-grid">
+                  <div className="market-data-item">
+                    <span className="data-label">High</span>
+                    <span className="data-value">67.610</span>
+                  </div>
+                  <div className="market-data-item">
+                    <span className="data-label">Low</span>
+                    <span className="data-value">63.230</span>
+                  </div>
+                  <div className="market-data-item">
+                    <span className="data-label">Open</span>
+                    <span className="data-value">65.000</span>
+                  </div>
+                  <div className="market-data-item">
+                    <span className="data-label">Prev Close</span>
+                    <span className="data-value">65.100</span>
+                  </div>
+                  <div className="market-data-item">
+                    <span className="data-label">Volume</span>
+                    <span className="data-value">2.69M</span>
+                  </div>
+                  <div className="market-data-item">
+                    <span className="data-label">Turnover</span>
+                    <span className="data-value">176.76M</span>
+                  </div>
+                  <div className="market-data-item">
+                    <span className="data-label">Avg Price</span>
+                    <span className="data-value">65.658</span>
+                  </div>
+                  <div className="market-data-item">
+                    <span className="data-label">Range %</span>
+                    <span className="data-value">6.73%</span>
+                  </div>
+                  <div className="market-data-item">
+                    <span className="data-label">Mkt Cap</span>
+                    <span className="data-value">9.85B</span>
+                  </div>
+                  <div className="market-data-item">
+                    <span className="data-label">Total Shares</span>
+                    <span className="data-value">146.18M</span>
+                  </div>
+                  <div className="market-data-item">
+                    <span className="data-label">Float Mkt Cap</span>
+                    <span className="data-value">2.12B</span>
+                  </div>
+                  <div className="market-data-item">
+                    <span className="data-label">Free Float</span>
+                    <span className="data-value">31.39M</span>
+                  </div>
+                  <div className="market-data-item">
+                    <span className="data-label">P/E TTM</span>
+                    <span className="data-value">Loss</span>
+                  </div>
+                  <div className="market-data-item">
+                    <span className="data-label">P/E LFY</span>
+                    <span className="data-value">125.53</span>
+                  </div>
+                  <div className="market-data-item">
+                    <span className="data-label">P/B</span>
+                    <span className="data-value">3.882</span>
+                  </div>
+                  <div className="market-data-item">
+                    <span className="data-label">Turnover %</span>
+                    <span className="data-value">8.58%</span>
+                  </div>
+                  <div className="market-data-item">
+                    <span className="data-label">Bid/Ask %</span>
+                    <span className="data-value">-83.33%</span>
+                  </div>
+                  <div className="market-data-item">
+                    <span className="data-label">Vol Ratio</span>
+                    <span className="data-value">0.56</span>
+                  </div>
+                  <div className="market-data-item">
+                    <span className="data-label">Dividend TTM</span>
+                    <span className="data-value">–</span>
+                  </div>
+                  <div className="market-data-item">
+                    <span className="data-label">Div Yield TTM</span>
+                    <span className="data-value">–</span>
+                  </div>
+                  <div className="market-data-item">
+                    <span className="data-label">52wk High</span>
+                    <span className="data-value">118.000</span>
+                  </div>
+                  <div className="market-data-item">
+                    <span className="data-label">52wk Low</span>
+                    <span className="data-value">47.880</span>
+                  </div>
+                  <div className="market-data-item">
+                    <span className="data-label">Historical High</span>
+                    <span className="data-value">118.000</span>
+                  </div>
+                  <div className="market-data-item">
+                    <span className="data-label">Historical Low</span>
+                    <span className="data-value">47.880</span>
+                  </div>
+                  <div className="market-data-item">
+                    <span className="data-label">Per Lot</span>
+                    <span className="data-value">1</span>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Quick Actions */}
+          <div className="quick-actions">
+            <button className="quick-action-btn buy" onClick={handleBuyClick}>
+              <span className="action-icon">📈</span>
+              <span>Buy</span>
+            </button>
+            {holding && (
+              <button className="quick-action-btn sell" onClick={handleSellClick}>
+                <span className="action-icon">📉</span>
+                <span>Sell</span>
+              </button>
+            )}
+            <button className="quick-action-btn">
+              <span className="action-icon">⚡</span>
+              <span>Alerts</span>
+            </button>
+            <button className="quick-action-btn">
+              <span className="action-icon">📰</span>
+              <span>News</span>
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Timeframe Selector */}
       <div className="timeframe-selector">
-        {['1D', '5D', '1M', '3M', '6M', '1Y', 'ALL'].map(tf => (
+        {['1D', '5D', '1M', '3M', '6M', '1Y', 'ALL'].map((tf: string) => (
           <button
             key={tf}
             className={`timeframe-btn ${timeframe === tf ? 'active' : ''}`}
@@ -214,6 +350,7 @@ const EnhancedStockDetail: React.FC = () => {
         </div>
       </div>
 
+      {/* The rest of your component remains exactly the same... */}
       {/* Market Depth / Order Book */}
       <div className="market-depth-section">
         <h3 className="section-title">Market Depth</h3>
@@ -371,6 +508,7 @@ const EnhancedStockDetail: React.FC = () => {
             </div>
           )}
 
+          {/* Other tab contents remain exactly the same... */}
           {activeTab === 'financials' && (
             <div className="financials-tab">
               <div className="financial-grid">

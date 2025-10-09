@@ -24,6 +24,7 @@ export interface AppContextType {
   userBalance: number;
   balance:number;
   isLoading: boolean;
+  toggleWatchlist: (symbol: string) => void;
   refreshStockData: () => void;
   addToWatchlist: (symbol: string) => void;
   removeFromWatchlist: (symbol: string) => void;
@@ -32,7 +33,7 @@ export interface AppContextType {
   getStock: (symbol: string) => Stock | undefined;
   getPortfolioValue: () => number;
   
-}
+  }
 
 export interface NewsArticle {
   icon: string;
