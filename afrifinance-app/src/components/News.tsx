@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSearch } from './SearchContext';
 import './News.css';
 
 const News = () => {
@@ -61,6 +62,8 @@ const News = () => {
     { id: 'earnings', icon: '🏛', label: 'Earnings' },
     { id: 'watchlist', icon: '📈', label: 'Watchlist' }
   ];
+  const { openSearch } = useSearch();
+
 
   return (
     <div className="news">
@@ -72,7 +75,7 @@ const News = () => {
         </div>
         <div className="header-right">
           <div className="header-icon">📁</div>
-          <div className="header-icon">🔍</div>
+          <div className="header-icon" onClick={openSearch}>🔍</div>
         </div>
       </div>
 

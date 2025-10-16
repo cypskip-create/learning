@@ -3,6 +3,7 @@ import { useAppContext } from '../components/AppContext';
 import { Stock } from '../types';
 import { useNavigate } from 'react-router-dom';
 import TradingModel from './TradingModel';
+import { useSearch } from './SearchContext';
 import './Markets.css';
 
   
@@ -37,6 +38,8 @@ const Markets: React.FC = () => {
     { id: 'commodities', icon: '🏗', label: 'Commodities' },
     { id: 'bonds', icon: '🏦', label: 'Bonds' }
   ];
+  const { openSearch } = useSearch();
+
 
   return (
     <div className="markets">
@@ -63,7 +66,7 @@ const Markets: React.FC = () => {
     >
       {isLoading ? '🔄 Refreshing...' : '🔄 Refresh'}
     </button>
-    <div className="header-icon">🔍</div>
+    <div className="header-icon" onClick={openSearch}>🔍</div>
     <div className="header-icon">🔔</div>
   </div>
       </div>

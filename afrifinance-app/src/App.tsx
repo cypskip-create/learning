@@ -11,9 +11,13 @@ import News from './components/News';
 import Discover from './components/Discover';
 import Portfolio from './components/Portfolio';
 import Profile from './components/Profile';
-import Watchlist from './components/Watchlist'; 
+import Watchlist from './components/Watchlist';
 import BottomNavigation from './components/BottomNavigation';
 import EnhancedStockDetail from './components/EnhancedStockDetail';
+
+// ✅ Import Search Components
+import { SearchProvider } from './components/SearchContext';
+import SearchBar from './components/SearchBar';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated } = useAuth();
@@ -85,8 +89,6 @@ const AppRoutes: React.FC = () => {
           </ProtectedRoute>
         }
       />
-
-      {/*Watchlist route */}
       <Route
         path="/watchlist"
         element={
@@ -103,16 +105,21 @@ const App: React.FC = () => {
   return (
     <AuthProvider>
       <AppProvider>
-        <Router>
-          <div className="app">
-            <div className="container">
-              <main className="main-content">
-                <AppRoutes />
-              </main>
-              <BottomNavigation />
+        <SearchProvider>
+          <Router>
+            <div className="app">
+              {/* Global Search Overlay */}
+              <SearchBar />
+
+              <div className="container">
+                <main className="main-content">
+                  <AppRoutes />
+                </main>
+                <BottomNavigation />
+              </div>
             </div>
-          </div>
-        </Router>
+          </Router>
+        </SearchProvider>
       </AppProvider>
     </AuthProvider>
   );

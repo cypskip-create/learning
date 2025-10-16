@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSearch } from './SearchContext';
 import "./Home.css";
 
 const Home: React.FC = () => {
@@ -21,6 +22,8 @@ const Home: React.FC = () => {
       day: "numeric",
     });
   };
+  const { openSearch } = useSearch();
+
 
   return (
     <div className="home">
@@ -31,34 +34,73 @@ const Home: React.FC = () => {
           <p>Good morning, Investor</p>
         </div>
         <div className="header-right">
-          <div className="header-icon">🔍</div>
+          <div className="header-icon" onClick={openSearch}>🔍</div>
           <div className="notification-badge">2</div>
           <div className="header-icon">🔔</div>
         </div>
       </div>
 
-      {/* Morning Brief */}
-      <div className="morning-brief">
-        <div className="brief-header">
-          <h2>📈 Morning Brief</h2>
-          <div className="brief-date">{formatDate(currentTime)}</div>
+      {/* Dynamic Brief */}
+<div className="morning-brief">
+  <div className="brief-header">
+    <h2>
+      {currentTime.getHours() < 12
+        ? "🌅 Morning Brief"
+        : currentTime.getHours() < 18
+        ? "🌇 Afternoon Brief"
+        : "🌙 Evening Brief"}
+    </h2>
+    <div className="brief-date">{formatDate(currentTime)}</div>
+  </div>
+
+  <div className="brief-content">
+    {currentTime.getHours() < 12 && (
+      <>
+        <div className="brief-item">
+          <h3>📈 NSE opens higher as banking sector rallies</h3>
+          <p>
+            Equity Bank leads early gains after strong Q3 results. Market sentiment remains optimistic this morning.
+          </p>
         </div>
-        <div className="brief-content">
-          <div className="brief-item">
-            <h3>📈 NSE up 1.2% as banking sector rallies</h3>
-            <p>
-              Equity Bank leads gains on strong Q3 earnings beat. KES steady at
-              129.5 vs USD.
-            </p>
-          </div>
-          <div className="key-focus">
-            <div className="key-focus-label">Key Focus:</div>
-            <div>
-              EABL earnings call at 2:00 PM EAT, inflation data due Thursday.
-            </div>
-          </div>
+        <div className="key-focus">
+          <div className="key-focus-label">Key Focus:</div>
+          <div>Morning trades driven by financial stocks and forex stability.</div>
         </div>
-      </div>
+      </>
+    )}
+
+    {currentTime.getHours() >= 12 && currentTime.getHours() < 18 && (
+      <>
+        <div className="brief-item">
+          <h3>💹 Midday Update: NSE holds steady on mixed trading</h3>
+          <p>
+            Safaricom and Equity remain active as investors await key inflation data later today.
+          </p>
+        </div>
+        <div className="key-focus">
+          <div className="key-focus-label">Key Focus:</div>
+          <div>Afternoon session led by telcos and manufacturing stocks.</div>
+        </div>
+      </>
+    )}
+
+    {currentTime.getHours() >= 18 && (
+      <>
+        <div className="brief-item">
+          <h3>🌙 Market Close: NSE ends day in green</h3>
+          <p>
+            Banking and telco sectors lifted the index by 1.2% as traders locked in gains before the weekend.
+          </p>
+        </div>
+        <div className="key-focus">
+          <div className="key-focus-label">Key Focus:</div>
+          <div>Global market outlook and tomorrow’s opening trends.</div>
+        </div>
+      </>
+    )}
+  </div>
+</div>
+
 
       {/* NSE Fund Tracking (Auto Scroll) */}
       <div className="fund-tracking">
