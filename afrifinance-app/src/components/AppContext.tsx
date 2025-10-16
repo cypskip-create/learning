@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { Stock, PortfolioHolding, TradeResult, AppContextType } from '../types';
 import { stockApi } from '../services/stockApi';
 
@@ -33,11 +33,21 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     { symbol: 'KCB', shares: 400, buyPrice: 42.15 },
   ]);
 
-  const [watchlist, setWatchlist] = useState<string[]>(['SAFCOM', 'EQTY']);
+  // ✅ Persisted Watchlist
+  const [watchlist, setWatchlist] = useState<string[]>(() => {
+    const saved = localStorage.getItem('watchlist');
+    return saved ? JSON.parse(saved) : ['SAFCOM', 'EQTY'];
+  });
+
   const [userBalance, setUserBalance] = useState<number>(50000);
   const [isLoading, setIsLoading] = useState(false);
 
-  // ✅ Function to refresh stock data
+  // ✅ Persist watchlist whenever it changes
+  useEffect(() => {
+    localStorage.setItem('watchlist', JSON.stringify(watchlist));
+  }, [watchlist]);
+
+  // ✅ Refresh stock data
   const refreshStockData = async () => {
     setIsLoading(true);
     try {
@@ -54,7 +64,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     }
   };
 
-  // ✅ Add missing toggleWatchlist function
+  // ✅ Watchlist Functions
   const toggleWatchlist = (symbol: string): void => {
     setWatchlist((prev) =>
       prev.includes(symbol)
@@ -64,15 +74,14 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   };
 
   const addToWatchlist = (symbol: string): void => {
-    if (!watchlist.includes(symbol)) {
-      setWatchlist([...watchlist, symbol]);
-    }
+    setWatchlist((prev) => (prev.includes(symbol) ? prev : [...prev, symbol]));
   };
 
   const removeFromWatchlist = (symbol: string): void => {
-    setWatchlist(watchlist.filter((s) => s !== symbol));
+    setWatchlist((prev) => prev.filter((s) => s !== symbol));
   };
 
+  // ✅ Trading Functions
   const buyStock = (symbol: string, shares: number, price: number): TradeResult => {
     const total = shares * price;
     if (total > userBalance) {
@@ -121,6 +130,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     return { success: true, message: `Sold ${shares} shares of ${symbol}` };
   };
 
+  // ✅ Helper Functions
   const getStock = (symbol: string): Stock | undefined => {
     return stocks.find((s) => s.symbol === symbol);
   };
@@ -132,7 +142,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     }, 0);
   };
 
-  // ✅ Value for context
+  // ✅ Provide all values
   const value: AppContextType = {
     stocks,
     portfolio,

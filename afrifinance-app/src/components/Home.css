@@ -295,6 +295,78 @@
                 padding: 16px;
             }
         }
+        .view-all-btn {
+  background: #0a84ff;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.view-all-btn:hover {
+  background: #0066cc;
+}
+
+.scroll-container {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+  margin-top: 10px;
+}
+
+.scroll-content {
+  display: flex;
+  gap: 1rem;
+  animation: scroll-left 25s linear infinite;
+}
+
+@keyframes scroll-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+
+.scroll-container:hover .scroll-content {
+  animation-play-state: paused;
+}
+
+
+.index-card {
+  background: #1e1e1e;
+  padding: 1rem;
+  border-radius: 12px;
+  min-width: 220px;
+  text-align: center;
+  color: #f0f0f0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.index-name {
+  font-size: 1rem;
+  color: #bbb;
+}
+
+.index-value {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin: 0.3rem 0;
+}
+
+.index-change.positive {
+  color: #4ade80; /* green */
+}
+
+.index-change.negative {
+  color: #f87171; /* red */
+}
+
+
         
         
        

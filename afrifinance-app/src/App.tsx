@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AppProvider } from './components/AppContext';
-import { AuthProvider, useAuth} from './components/AuthContext';
+import { AuthProvider, useAuth } from './components/AuthContext';
 import './App.css';
 
 import Auth from './components/Auth';
@@ -11,6 +11,7 @@ import News from './components/News';
 import Discover from './components/Discover';
 import Portfolio from './components/Portfolio';
 import Profile from './components/Profile';
+import Watchlist from './components/Watchlist'; 
 import BottomNavigation from './components/BottomNavigation';
 import EnhancedStockDetail from './components/EnhancedStockDetail';
 
@@ -24,8 +25,10 @@ const AppRoutes: React.FC = () => {
 
   return (
     <Routes>
+      {/* Authentication route */}
       <Route path="/auth" element={isAuthenticated ? <Navigate to="/" /> : <Auth />} />
-      
+
+      {/* Protected routes */}
       <Route
         path="/"
         element={
@@ -75,10 +78,20 @@ const AppRoutes: React.FC = () => {
         }
       />
       <Route
-        path="/Profile"
+        path="/profile"
         element={
           <ProtectedRoute>
             <Profile />
+          </ProtectedRoute>
+        }
+      />
+
+      {/*Watchlist route */}
+      <Route
+        path="/watchlist"
+        element={
+          <ProtectedRoute>
+            <Watchlist />
           </ProtectedRoute>
         }
       />
